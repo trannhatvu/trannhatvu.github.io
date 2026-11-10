@@ -1,0 +1,28 @@
+---
+title: "A green log is not an exit code"
+description: "When debugging CI, inspect the command status—not just the last cheerful line of output."
+date: 2026-11-09
+lang: en
+kind: note
+tags: ["GitLab CI", "Scripting"]
+translationKey: check-the-exit-code
+starter: true
+---
+
+The shell uses exit codes to communicate success. A command can print an encouraging message and still fail.
+
+When investigating a command locally, capture its status immediately:
+
+```bash
+if your-command; then
+  printf 'Command succeeded\n'
+else
+  status=$?
+  printf 'Command failed with status %s\n' "$status" >&2
+  exit "$status"
+fi
+```
+
+Replace `your-command` with the command under investigation. The `if` handles failure explicitly, including in scripts using `set -e`.
+
+Do not run another command before reading `$?`: that would replace the status you intended to inspect.
