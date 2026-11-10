@@ -1,0 +1,95 @@
+---
+import '../styles/global.css';
+import { site, text, type Language } from '../lib/site';
+interface Props {
+  title?: string;
+  description?: string;
+  lang: Language;
+  alternate?: string;
+  article?: boolean;
+  noindex?: boolean;
+}
+const { title, description = text[Astro.props.lang].description, lang, alternate, article = false, noindex = false } = Astro.props;
+const t = text[lang];
+const other = lang === 'en' ? 'vi' : 'en';
+const pathname = Astro.url.pathname;
+const canonical = new URL(pathname, Astro.site);
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.title}`;
+---
+<!doctype html>
+<html lang={lang} data-pagefind-filter={`language:${lang}`}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f8fafc" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {alternate && <>
+      <link rel="alternate" hreflang={lang} href={canonical} />
+      <link rel="alternate" hreflang={other} href={new URL(alternate, Astro.site)} />
+    </>}
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonical} />}
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'vi_VN'} />
+    <script is:inline>
+      (() => {
+        let preference;
+        try { preference = localStorage.getItem('theme'); }
+        catch (error) { console.warn('Theme preference storage is unavailable.', error); }
+        const theme = preference === 'dark' || preference === 'light'
+          ? preference : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.skip}</a>
+    <header class="site-header">
+      <a class="brand" href={`/${lang}/`} aria-label={`${site.name} — ${site.title}`}>
+        <span class="brand-mark" aria-hidden="true">nv<span>.</span></span>
+        <span class="brand-name">{site.name}<span class="brand-subtitle">engineering notebook</span></span>
+      </a>
+      <nav aria-label={lang === 'en' ? 'Main navigation' : 'Điều hướng chính'}>
+        {(['writing', 'notes', 'about'] as const).map(section => (
+          <a href={`/${lang}/${section}/`} aria-current={pathname.startsWith(`/${lang}/${section}/`) ? 'page' : undefined}>{t[section]}</a>
+        ))}
+      </nav>
+      <div class="header-tools">
+        <a class="icon-button search-link" href={`/${lang}/search/`} aria-label={t.search} title={t.search}>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 4.5 4.5" /></svg>
+        </a>
+        <button class="icon-button theme-toggle" type="button" aria-label={t.theme} title={t.theme} aria-pressed="false" hidden>
+          <svg class="sun-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
+          <svg class="moon-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" /></svg>
+        </button>
+        {alternate && <a class="language-link" href={alternate} lang={other} hreflang={other} aria-label={t.language}>{other.toUpperCase()}</a>}
+      </div>
+    </header>
+    <main id="main" class="site-main" tabindex="-1"><slot /></main>
+    <footer class="site-footer">
+      <div><a href={`/${lang}/`}>{site.name}<span class="accent">.</span></a><p>{t.footer}</p></div>
+      <span class="footer-label">© {new Date().getFullYear()} · {lang === 'en' ? 'A work in progress' : 'Luôn tiếp tục hoàn thiện'}</span>
+    </footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      if (toggle) {
+        toggle.hidden = false;
+        const sync = () => toggle.setAttribute('aria-pressed', String(document.documentElement.dataset.theme === 'dark'));
+        sync();
+        toggle.addEventListener('click', () => {
+          const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = next;
+          try { localStorage.setItem('theme', next); }
+          catch (error) { console.warn('Theme preference could not be saved.', error); }
+          sync();
+        });
+      }
+    </script>
+  </body>
+</html>

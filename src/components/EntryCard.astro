@@ -1,0 +1,19 @@
+---
+import { dateLabel, entryUrl, readingTime, tagSlug, text, type Entry } from '../lib/site';
+interface Props { entry: Entry; compact?: boolean }
+const { entry, compact = false } = Astro.props;
+const t = text[entry.data.lang];
+---
+<article class:list={['entry-card', { compact }]}>
+  <div class="entry-meta">
+    <time datetime={entry.data.date.toISOString()}>{dateLabel(entry.data.date, entry.data.lang)}</time>
+    <span aria-hidden="true">/</span>
+    <span>{readingTime(entry)} {t.minute}</span>
+    {entry.data.kind === 'note' && <span class="note-label">{t.note}</span>}
+  </div>
+  <h3><a href={entryUrl(entry)}>{entry.data.title}<span class="entry-arrow" aria-hidden="true">↗</span></a></h3>
+  <p>{entry.data.description}</p>
+  <div class="tags">
+    {entry.data.tags.map(tag => <a href={`/${entry.data.lang}/tags/${tagSlug(tag)}/`}>{tag}</a>)}
+  </div>
+</article>
