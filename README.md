@@ -31,6 +31,7 @@ Common helpers:
 ```sh
 just                 # list available recipes
 just check           # type-check
+just pages-config    # regenerate Pages CMS config
 just build           # build site and search index
 just test            # build, then run static-site tests
 just browser-install # install Chromium once for browser tests
@@ -63,6 +64,20 @@ your OS initially; an explicit choice is stored locally in your browser.
 Create a Markdown file in `src/content/writing/en/` or `src/content/writing/vi/`.
 GitHub's **Add file → Create new file** editor is sufficient. Commit to `main` to
 build and publish automatically after Pages has been enabled.
+
+### Edit with Pages CMS
+
+The repository includes a Pages CMS configuration in [`.pages.yml`](.pages.yml).
+After pushing it to GitHub, open [Pages CMS](https://app.pagescms.org), select
+this repository, and choose **Writing (English)** or **Bài viết (Tiếng Việt)**
+from the content navigation. The editor exposes the post metadata and a
+rich-text Markdown body; saved changes go back to GitHub and trigger the normal
+deployment workflow.
+
+The checked-in configuration is generated from the Astro writing schema. After
+changing that schema or its Pages CMS editor metadata, run `just pages-config`
+and commit the updated `.pages.yml`. `just check` verifies that the generated
+file is current.
 
 ```yaml
 ---
