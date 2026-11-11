@@ -1,9 +1,10 @@
 # Raini’s Petit Coin
 
-A bilingual, static personal blog about code, technology, everyday discoveries,
-and life abroad. Built with Astro, TypeScript, Tailwind CSS, Markdown/MDX,
-Pagefind, and Mermaid. No database, paid API, cookies, or analytics. The layout
-is an original lightweight theme rather than a fork of AstroPaper.
+A static personal blog with an English interface and English/Vietnamese writing
+about code, technology, everyday discoveries, and life abroad. It uses Astro,
+TypeScript, Tailwind CSS, Markdown/MDX, Pagefind, and Mermaid. No database, paid
+API, cookies, or analytics. The layout is an original lightweight theme rather
+than a fork of AstroPaper.
 
 ## Run locally
 
@@ -31,7 +32,7 @@ Common helpers:
 ```sh
 just                 # list available recipes
 just check           # type-check
-just pages-config    # regenerate Pages CMS config
+just pages-config     # regenerate Pages CMS config
 just build           # build site and search index
 just test            # build, then run static-site tests
 just browser-install # install Chromium once for browser tests
@@ -49,19 +50,19 @@ so development mode displays an explanatory message instead of a broken index.
 - Edit your display name and `portrait` path in [src/lib/site.ts](src/lib/site.ts).
   Put your own photo in `public/images/` and use `/images/your-photo.webp`.
   Initials are deliberately used until a real portrait is provided.
-- Update both versions of the About page text in [src/lib/site.ts](src/lib/site.ts).
+- Update the About page text in [src/lib/site.ts](src/lib/site.ts).
 - Review or replace the starter articles. They are labeled visibly through
   `starter: true`; set that to `false` after adapting them.
 - If your GitHub username differs, update `site` in
   [astro.config.mjs](astro.config.mjs) and `url` in
   [src/lib/site.ts](src/lib/site.ts).
 
-System fonts support Vietnamese without external font requests. The theme follows
-your OS initially; an explicit choice is stored locally in your browser.
+System fonts avoid external font requests. The theme follows your OS initially;
+an explicit choice is stored locally in your browser.
 
 ## Publish a post
 
-Create a Markdown file in `src/content/writing/en/` or `src/content/writing/vi/`.
+Create a Markdown file in `src/content/writing/`.
 GitHub's **Add file → Create new file** editor is sufficient. Commit to `main` to
 build and publish automatically after Pages has been enabled.
 
@@ -69,10 +70,9 @@ build and publish automatically after Pages has been enabled.
 
 The repository includes a Pages CMS configuration in [`.pages.yml`](.pages.yml).
 After pushing it to GitHub, open [Pages CMS](https://app.pagescms.org), select
-this repository, and choose **Writing (English)** or **Bài viết (Tiếng Việt)**
-from the content navigation. The editor exposes the post metadata and a
-rich-text Markdown body; saved changes go back to GitHub and trigger the normal
-deployment workflow.
+this repository, and choose **Writing** from the content navigation. The editor
+exposes the post metadata and a rich-text Markdown body; saved changes go back
+to GitHub and trigger the normal deployment workflow.
 
 The checked-in configuration is generated from the Astro writing schema. After
 changing that schema or its Pages CMS editor metadata, run `just pages-config`
@@ -87,7 +87,6 @@ date: 2026-11-11
 lang: en
 kind: tutorial
 tags: ["GitLab CI", "Automation"]
-translationKey: your-article
 draft: false
 starter: false
 ---
@@ -96,13 +95,16 @@ starter: false
 - Use `kind: note` for the separate Notes feed.
 - Use `kind: article` for essays and general writing; both articles and tutorials
   appear in Writing.
-- Filenames become URLs: `en/example.md` becomes `/en/writing/example/`
-  (or `/en/notes/example/` for a note).
+- Set `lang` to `en` or `vi`; it controls the article document language and date
+  formatting. Search covers both languages in one shared index.
+- Filenames become URLs: `example.md` becomes `/writing/example/`
+  (or `/notes/example/` for a note).
 - Use URL-safe, lowercase filenames. Keep tags consistently named.
-- A Vietnamese translation uses `lang: vi` and the same `translationKey`. Filenames
-  may differ. Translation links appear only when both published versions exist.
-- Each language has its own lists, topics, and search index. No automatic
-  translation or browser-language redirects.
+- Both languages share the same root-level pages, topics, and search page.
+  The interface and navigation remain in English; article URLs have no
+  language prefix.
+- Filenames must be unique across both languages. Add a language suffix when
+  the same filename is already in use.
 - Dates control ordering, **not scheduled publishing**. Set `draft: true` to
   exclude unfinished content. Drafts are not rendered even in local development.
 - Future interactive components can be imported from `.mdx` articles.
@@ -124,9 +126,10 @@ and provide meaningful alt text. For a caption, use:
 </figure>
 ```
 
-The 8 remaining migrated WordPress posts are in the Vietnamese archive. The
-6 retained authorized WordPress uploads are stored locally in
-`public/images/wordpress/`; images from other sources remain links.
+The 8 remaining migrated WordPress posts are in the same writing collection.
+Their 6 retained authorized images and the author avatar live directly in
+`public/images/` with descriptive filenames; images from other sources remain
+links.
 
 ## Deploy to GitHub Pages
 
@@ -135,8 +138,8 @@ The 8 remaining migrated WordPress posts are in the Vietnamese archive. The
 2. In **Settings → Pages → Build and deployment**, select **GitHub Actions**.
 3. The included [deployment workflow](.github/workflows/deploy.yml) runs checks on
    pull requests targeting `main`. It deploys `dist/` only from `main`.
-4. Visit `https://trannhatvu.github.io/`. The root leads to `/en/`; Vietnamese lives
-   at `/vi/`. No custom domain is needed.
+4. Visit `https://trannhatvu.github.io/`. Both languages share the root-level
+   site; no language prefix or custom domain is needed.
 
 This configuration is for a user-site repository at the domain root, not a
 project site hosted under a repository subpath. No GitHub repository is created
@@ -144,9 +147,10 @@ or published by the local setup itself.
 
 ## Validation
 
-`npm test` checks the **built** site: local links and anchors, canonical URLs,
-language routes, reciprocal translations, draft exclusion, syntax highlighting,
-search output, and the deployment workflow. Build before running it.
+`npm test` checks the **built** site: root routes, local links and anchors,
+canonical URLs, both content languages without language-prefixed routes, draft
+exclusion, syntax highlighting, search output, and the deployment workflow.
+Build before running it.
 
 Manually check search in both languages, mobile navigation, keyboard focus,
 light/dark persistence, copy buttons, and diagram rendering after UI changes.
