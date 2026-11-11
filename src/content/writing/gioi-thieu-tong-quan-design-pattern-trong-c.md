@@ -1,6 +1,6 @@
 ---
 title: "Giới thiệu tổng quan design pattern trong C++"
-description: "Mục lục I. Giới thiệu Design pattern một khái niệm được lặp đi lặp lại khi chúng ta code. Chúng ta đều đã nghe nhiều về những mô hình này, nhưng thực sự chúng là gì? Chúng là những mô hình lý thuyết p…"
+description: "Mục lục I. Giới thiệu Design pattern một khái niệm được lặp đi lặp lại khi chúng ta lập trình. Chúng ta đều đã nghe nhiều về những mô hình này, nhưng thực sự chúng là gì?"
 date: 2018-08-18
 lang: vi
 kind: article
@@ -15,7 +15,7 @@ starter: false
 
 <p style="text-align:justify;">Mục lục</p>
 <h2 style="text-align:justify;">I. Giới thiệu</h2>
-<p style="text-align:justify;">Design pattern một khái niệm được lặp đi lặp lại khi chúng ta code. Chúng ta đều đã nghe nhiều về những mô hình này, nhưng thực sự chúng là gì?</p>
+<p style="text-align:justify;">Design pattern một khái niệm được lặp đi lặp lại khi chúng ta lập trình. Chúng ta đều đã nghe nhiều về những mô hình này, nhưng thực sự chúng là gì?</p>
 <blockquote><p>Chúng là những mô hình lý thuyết phù hợp để giải quyết được một vấn đề cụ thể.</p></blockquote>
 <p style="text-align:justify;">Trong các phần sau của bài viết, các pattern thông dụng sẽ được trình bày với C++.</p>
 <p></p>

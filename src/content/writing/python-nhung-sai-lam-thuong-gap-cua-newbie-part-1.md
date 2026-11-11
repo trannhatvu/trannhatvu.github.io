@@ -1,6 +1,6 @@
 ---
 title: "Python: Những sai lầm thường gặp của newbie, Part 1"
-description: "July 6, 2013 Bài viết này từ vài năm trước, một số chi tiết (theo ý kiến của tôi) có thể đã lỗi thời. Tôi vẫn mong muốn nghe những phản hồi của các bạn tại phần bình luận dưới đây. Enjoy! Trong vài th…"
+description: "6 Tháng 7 2013 Bài viết này từ vài năm trước, một số chi tiết (theo ý kiến của tôi) có thể đã lỗi thời. Tôi vẫn mong muốn nghe những phản hồi của các bạn tại phần bình luận dưới đây. Enjoy!"
 date: 2017-08-25
 lang: vi
 kind: article

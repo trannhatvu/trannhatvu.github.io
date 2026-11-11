@@ -1,6 +1,6 @@
 ---
 title: "Làm thế nào để viết code sạch? Những bài học từ “The Clean Code” của Robert C. Martin"
-description: "Có hai thứ tồn tại – Lập trình và Lập trình giỏi. Lập trình là những gì mà chúng ta đang làm cả đây rồi. Bây giờ là lúc để Lập trình giỏi. Chúng ta đều biết rằng code xấu thì cũng hoạt động thôi. Nhưn…"
+description: "Có hai thứ tồn tại – Lập trình và Lập trình giỏi. Lập trình là những gì mà chúng ta đang làm cả đây rồi. Bây giờ là lúc để Lập trình giỏi."
 date: 2018-11-13
 lang: vi
 kind: article
