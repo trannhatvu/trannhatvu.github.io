@@ -1,0 +1,184 @@
+---
+title: "Làm thế nào để viết code sạch? Những bài học từ “The Clean Code” của Robert C. Martin"
+description: "Có hai thứ tồn tại – Lập trình và Lập trình giỏi. Lập trình là những gì mà chúng ta đang làm cả đây rồi. Bây giờ là lúc để Lập trình giỏi. Chúng ta đều biết rằng code xấu thì cũng hoạt động thôi. Nhưn…"
+date: 2018-11-13
+lang: vi
+kind: article
+tags: ["Công nghệ"]
+translationKey: "wordpress-800"
+draft: false
+starter: false
+---
+
+
+<figure class="wp-block-image size-large"><a href="/images/wordpress/cleancode.png"><img loading="lazy" width="1024" height="512" data-attachment-id="877" data-permalink="https://rainipetitcoin.wordpress.com/2018/11/13/lam-the-nao-de-viet-code-sach-nhung-bai-hoc-tu-the-clean-code-cua-robert-c-martin/cleancode/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/cleancode.png" data-orig-size="1600,800" data-comments-opened="1" data-image-title="CleanCode" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/cleancode.png?w=1024" src="/images/wordpress/cleancode.png" alt="" class="wp-image-877" /></a></figure>
+
+
+<section class="section section--body section--first">
+<div class="section-content">
+<div class="section-inner sectionLayout--insetColumn">
+<p>Có hai thứ tồn tại &#8211; Lập trình và Lập trình giỏi. Lập trình là những gì mà chúng ta đang làm cả đây rồi. Bây giờ là lúc để Lập trình giỏi. Chúng ta đều biết rằng code xấu thì cũng hoạt động thôi. Nhưng sẽ mất thời gian và tài nguyên để tạo một chương trình tốt. Hơn nữa, mấy tay lập trình viên sẽ chế nhạo ta khi họ cố hiểu xem cái quái gì trong code của ta. Không bao giờ là quá trễ để &#8220;chăm sóc&#8221; cho những chương trình của ta.</p>
+<p>Quyển sách này cho tôi biết rất nhiều kiến thức về những kinh nghiệm tốt nhất và làm thế nào để thực sự viết code. Giờ thì tôi thấy ái ngại về kĩ năng code của mình. Mặc dù tôi luôn phấn đấu để code mình tốt hơn nhưng quyển sách này đã dạy tôi rất nhiều điều.</p>
+<p>Hiện tại thì bạn đang đọc bài viết này bởi hai lý do. Một, bạn là một lập trình viên. Hai, bạn muốn trở thành một lập trình viên giỏi hơn. Tốt lắm. Chúng ta thực sự cần nhiều lập trình viên giỏi hơn.</p>
+</div>
+</div>
+</section>
+<p></p>
+<section class="section section--body section--first">
+<div class="section-content">
+<div class="section-inner sectionLayout--insetColumn">
+<p id="c42f" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Đặc điểm của code sạch:</strong></p>
+<ol class="postList">
+<li>Nó nên thật tao nhã — Code sạch cần đưa lại cảm giác dễ chịu khi đọc. Việc đọc nó có thể khiến ta cười theo cách mà một chiếc hộp nhạc du dương hay một con xe được thiết kế ngon ghẻ mang lại.</li>
+<li>Code sạch là sự tập trung — Mỗi function, mỗi class, mỗi module phải thể hiện một thái độ độc lập mà vẫn hoàn toàn không bị chia tách, không bị vấy bẩn bởi những chi tiết xung quanh.</li>
+<li>Code sạch là sự quan tâm. Ai đó đã dành thời gian để giữ nó được đơn giản và ngăn nắp. Họ đã chú ý cẩn thận từng ly từng tí. Đó là sự quan tâm.</li>
+<li>Chạy tất cả các test.</li>
+<li>Không có contain trùng lặp</li>
+<li>Tối thiểu hóa số lượng các entity như class, method, function và những thứ tương tự.</li>
+</ol>
+<h3 id="992e" class="graf graf--h3 graf-after--p">Viết code sạch như thế nào?</h3>
+<h3 id="bbf8" class="graf graf--h3 graf-after--h3"><em class="markup--em markup--h3-em">Những cái tên đầy ý nghĩa</em></h3>
+<p>Hãy dùng những cái tên thể hiện ý định. Đặt một cái tên hay sẽ tốn thời gian nhưng về sau sẽ giúp tiết kiệm được thời gian nhiều hơn. Tên của một variable, function hoặc class phải trả lời được tất cả những câu hỏi quan trọng. Nó phải giải thích cho ta biết tại sao nó tồn tại, nó làm gì và sử dụng như thế nào. Nếu một cái tên phải cần một comment để giải nghĩa thì nó không phải là tên tiết lộ ý định.</p>
+<p id="06ed" class="graf graf--p graf-after--p">Ví dụ- int d; // elapsed time in days (thời gian trong ngày).</p>
+<blockquote>
+<p><em>Chúng ta nên chọn cái tên chỉ định những gì đang được tính toán và đơn vị của sự tính toán đó.</em></p>
+</blockquote>
+<p>Một cái tên rõ nghĩa hơn có thể là:- int elapsedTime. (Mặc dù quyển sách bảo là elapsedTimeInDays, tôi vẫn thích cái cũ hơn. Giả dụ thời gian trôi qua thay đổi thành mili giây. Thì chúng ta phải đổi từ long sang int và elapsedTimeInMillis thay vì elapsedTimeInDays. Và rồi bao lâu nữa, chúng ta sẽ tiếp tục thay đổi cả loại dữ liệu và tên.) (Không đồng ý -_-)</p>
+<p id="41b6" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Tên Class</strong> — Class và object nên là danh từ hoặc câu danh từ như là Customer, WikiPage, Account và AddressParser.. Tránh các từ như Manager, Processor, Data hoặc Info trong tên một class. Một tên class không nên là một động từ.</p>
+<p id="5266" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Tên Method—</strong>Method nên là động từ hoặc câu động từ như postPayment, deletePage hoặc save. Các methode truy cập, biến đổi và predicate phải được đặt tên cho giá trị của chúng và được đặt get, set ở phía trước tên.</p>
+<p>Khi constructor bị nạp chồng, sử dụng các static factory method với tên có thể mô tả argument. Ví dụ,</p>
+<p id="4096" class="graf graf--p graf-after--p">Complex fulcrumPoint = Complex.FromRealNumber(23.0); nói chung sẽ tốt hơn Complex fulcrumPoint = new Complex(23.0);</p>
+<p id="44c5" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Chọn Một Từ mỗi Concept —</strong>Chọn một từ cho mỗi concept abstract và liên kết với nó. Ví dụ, thật là bối rối khi phải fetch, retrieve và get bằng các method tương đương của những class khác nhau. Làm sao bạn có thể nhớ tên method nào sẽ đi với class nào? Tương tự như vậy, thật dễ nhầm khi có một controller, một manager và một driver trên cùng code base. Điểm khác biệt chính yếu giữa một DeviceManager với một Protocol-Controller là gì nào?</p>
+<h3 id="26eb" class="graf graf--h3 graf-after--p"><em>Function</em></h3>
+<figure id="d33d" class="graf graf--figure graf--layoutOutsetLeft graf-after--h3">
+<div class="aspectRatioPlaceholder is-locked">
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded"><img class="progressiveMedia-image js-progressiveMedia-image alignleft" src="/images/wordpress/67d82-1-4gyjqwwkhbhw7mbx5pbkw.png" /></div>
+</div>
+</figure>
+<p>Nguyên tắc đầu tiên của function là chúng cần nhỏ. Nguyên tắc thứ hai của function là chúng cần nhỏ hơn nữa. Ngụ ý rắng những block trong các câu lệnh if else while v.v nên chỉ là một dòng dài. Có thể dòng đó có thể là một function call. Điều này không chỉ giữ cho phần kèm theo function nhỏ mà còn bổ sung giá trị tra cứu tài liệu bởi function được gọi trong block có thể có một cái tên mô tả xinh xắn.</p>
+<h4 id="41e3" class="graf graf--h4 graf-after--p">Function argument</h4>
+<p id="7a80" class="graf graf--p graf-after--h4">Một function không nên có quá 3 argument. Càng ít càng tốt. Khi một function cần nhiều hơn hai hoặc ba argument, có nghĩa là một trong số những argument đó nên được wrap lại vào một class riêng của chúng. Việc giảm thiểu số lượng argument bằng cách tạo ra objet từ chúng nhìn như kiểu gian lận, nhưng mà thực ra là không đâu.</p>
+<p>Bây giờ khi mà tôi nó giảm kích thước của một function, bạn nên thực sự nghĩ về việc làm thế nào để giảm số lượng try-catch như cách nó đã làm code của bạn phình to như nào. Câu trả lời của tôi là tạo một function chứa câu lệnh try-catch-finally. Và chia phần thân của block try/catch/finally thành các function riêng rẽ. Ví dụ</p>
+
+```java
+public void delete(Page page) {
+  try {
+     deletePageAndAllReferences(page);
+  }
+  catch (Exception e) {
+    logError(e);
+  }
+}
+
+private void deletePageAndAllReferences(Page page) throws Exception {
+    deletePage(page);
+    registry.deleteReference(page.name);
+    configKeys.deleteKey(page.name.makeKey());
+}
+
+private void logError(Exception e) {
+    logger.log(e.getMessage());
+}
+```
+
+Source: [try-catch-finally separation.java by shubham08gupta](https://gist.github.com/shubham08gupta/ecb9cb35e21b4a1bcb25ea0310ddd3e1#file-try-catch-finally-separation-java).
+
+<p>Điều này làm cho logic sáng tỏ như pha lê. Tên fuction có thể dễ dàng mô tả được những gi chúng ta muốn. Xử lý lỗi có thể được bỏ qua. Điều này là một sự tách bạch rõ ràng, làm cho code dễ hiểu và dễ sửa đổi hơn.</p>
+<p id="9521" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Xử lý lỗi là một công việc</strong>—  Function nên thực hiện một công việc. Xử lý lỗi lại là một công việc khác nữa. Nếu một function có một từ khóa try thì nó nên là từ khóa đầu tiên và rằng đằng sau những block catch/finally không nên có gì cả.</p>
+<h4 id="864c" class="graf graf--h4 graf-after--p"><em>Comment</em></h4>
+<p>Nếu bạn đang viết comment để trình bày ý tưởng của mình, đó là sai lầm. Lý tưởng nhất, comment hoàn toàn không cần thiết. Nếu code của bạn cần có comment, bạn đang làm cái gì đó không ổn rồi. Code của chúng ta nên tự giải thích được mọi thứ. Các ngôn ngữ lập trình hiện đại như tiếng Anh vậy, chúng ta có thể dễ dàng giải thích ý tưởng của mình. Việc đặt tên chính xác có thể loại bỏ các comment.</p>
+<p>Chúng ta không xét đến những comment pháp lý ở đây. Chúng ta cần viết nó. Comment pháp lý có ý nghĩa về mặt bản quyền và giấy phép.</p>
+<h4 id="2502" class="graf graf--h4 graf-after--p"><em>Object và Cấu trúc dữ liệu</em></h4>
+<p>Đây là một chủ đề phức tạp cần sự tập trung cao độ. Đầu tiên chúng ta cần phải làm rõ sự khác biệt giữa object và cấu trúc dữ liệu.</p>
+<blockquote id="52b2" class="graf graf--blockquote graf-after--p">
+<p><em>Các object ẩn dữ liệu của chúng đằng sau các lớp abstract và thể hiện những function thực thi trên những dữ liệu đó. Cấu trúc dữ liệu thể hiện dữ liệu của chính nó và không có các function có nghĩa.</em></p>
+</blockquote>
+<p>Đó là 2 thứ hoàn toàn khác biệt. Một cái là để lưu trữ dữ liệu và cái còn lại là cách thao tác trên dữ liệu đó. Xét ví dụ sau, class Geometry thực thi ba class hình dạng. Những class hình dạng là những cấu trúc dữ liệu đơn giản không có các thao tác xử lý. Tất cả các thao tác đều ở trong class Geometry.</p>
+
+```java
+public class Square {
+  public Point topLeft;
+  public double side;
+}
+
+public class Rectangle {
+  public Point topLeft;
+  public double height;
+  public double width;
+}
+
+public class Circle {
+  public Point center;
+  public double radius;
+}
+
+public class Geometry {
+  public final double PI = 3.141592653589793;
+  public double area(Object shape) throws NoSuchShapeException {
+    if (shape instanceof Square) {
+        Square s = (Square)shape;
+        return s.side * s.side;
+    } else if (shape instanceof Rectangle) {
+        Rectangle r = (Rectangle)shape;
+        return r.height * r.width;
+    } else if (shape instanceof Circle) {
+        Circle c = (Circle)shape;
+        return PI * c.radius * c.radius;
+    }
+        throw new NoSuchShapeException();
+    }
+}
+```
+
+Source: [Shape.java by shubham08gupta](https://gist.github.com/shubham08gupta/f69cf5dc9942d7df47b584903dea5c83#file-shape-java).
+
+<p>Xem xét điều gì sẽ xảy ra nếu một function perimeter() được thêm vào Geometry. Những class hình dạng sẽ không bị tác động! Bất kỳ class phụ thuộc vào các hình dạng cũng không bị ảnh hưởng! Mặt khác nếu tôi thêm vào một hình dạng mới, tôi phải thay đổi tất cả những function trong Geometry để giải quyết vấn đề. Một nữa, hãy đọc kỹ lại. Chú ý rằng hai điều kiện này đối lập hoàn toàn với nhau.</p>
+<p id="bf8c" class="graf graf--p graf-after--p">Bây giờ hãy xem xét một cách tiếp cận khác cho kịch bản trên.</p>
+
+<p>Bây giờ chúng ta có thể dễ dàng thêm những Shape mới như là cấu trúc dữ liệu được so sách với trường hợp trước. Và khi chúng ta phải thêm function perimeter() chỉ cho một Shape, chúng ta bắt buộc phải triển khai function đó cho tất cả các Shape với class Shape là một interface chứa function area() và perimeter(). Điều này có nghĩa:</p>
+<blockquote id="f4cf" class="graf graf--blockquote graf--hasDropCapModel graf-after--p">
+<p><em>Cấu trúc dữ liệu giúp dễ dàng thêm function mới mà không cần thay đổi cấu trúc dữ liệu có sẵn. Code hướng đối tượng (sử dụng object) giúp dễ dàng thêm classe mới mà không cần thay đổi function có sẵn.</em></p>
+</blockquote>
+<p>Phần bổ sung sau đây cũng đúng:</p>
+<blockquote id="dcb2" class="graf graf--blockquote graf-after--p">
+<p><em>Code hướng thủ tục (sử dụng cấu trúc dữ liệu) sẽ khó khăn khi thêm cấu trúc dữ liệu mới bởi vì tất cả function phải thay đổi. Code hướng đối tượng sẽ khó khăn khi thêm function mới bởi vì tất cả class phải thay đổi.</em></p>
+</blockquote>
+<p>Do đó, điều gây khó khăn cho hướng đối tượng lại dễ đối với hướng thủ tục, và ngược lại!</p>
+<p>Trong bất cứ hệ thống phức tạp nào sẽ có những lúc chúng ta muốn thêm kiểu dữ liệu mới hơn là function mới. Đối với những trường hợp này, object và hướng đối tượng sẽ được ưu tiên nhất. Và ngược lại.</p>
+<p id="7266" class="graf graf--p graf-after--p">Những lập trình viên kinh nghiệm biết cái ý tưởng mọi thứ đều là một object là ảo tưởng. Đôi khi bạn phải thực hiện những cấu trúc dữ liệu đơn giản với những thủ tục thực thi với chúng. Vậy bạn cần phải cân nhắc thật kỹ lưỡng về việc phải triển khai cái gì cũng như về những dự tính trong tương lái để có thể dễ dàng cập nhật. Như trong ví dụ này, vì bất kỳ hình dạng mới nào cũng có thể được thêm vào trong tương lai, tôi sẽ chọn cách tiếp cận hướng đối tượng cho nó.</p>
+</div>
+<p> </p>
+</div>
+</section>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<section class="section section--body section--last">
+<div class="section-content">
+<div class="section-inner sectionLayout--insetColumn"><hr />
+<p>Tôi hiểu thật khó để viết một chương trình tốt với thời gian cho trước khi mà bạn phải thực hiện các nhiệm vụ của mình. Nhưng bạn sẽ trì hoãn đến khi nào? Bắt đầu thật chậm rãi và chắn chắn. Code của bạn có thể thực hiện những điều kì diệu cho bạn và chủ yếu là cho những người khác. Tôi đã bắt đầu và nhận ra nhiều sai lầm tôi đã luôn mắc phải. <span class="markup--quote markup--p-quote is-other">Mặc dù điều này làm tôi mất thêm một vài giờ mỗi ngày, nhưng rồi tôi sẽ được đền đáp trong tương lai thôi.</span></p>
+<blockquote id="0944" class="graf graf--blockquote graf-after--p">
+<p>Đây không phải là kết thúc của blog. Tôi sẽ tiếp tục viết về những cách thức mới để làm sạch code của bạn. Hơn nữa, tôi cũng sẽ viết về một số design pattern cơ bản mà mọi lập trình viên cần phải biết trong bất cứ lĩnh vực nào.</p>
+</blockquote>
+<div class="postArticle-content js-postField js-notesSource js-trackedPost">
+<section class="section section--body section--last">
+<div class="section-content">
+<div class="section-inner sectionLayout--insetColumn">
+<p id="9700" class="graf graf--p graf-after--p graf--trailing"><strong class="markup--strong markup--p-strong">Xem tất cả các bài viết tại </strong><strong class="markup--strong markup--p-strong"><a class="markup--anchor markup--p-anchor" href="https://blog.mindorks.com/" target="_blank" rel="noopener nofollow">blog.mindorks.com</a></strong></p>
+<hr />
+<p><em>Đọc bài viết gốc tại <a href="https://medium.com/mindorks/how-to-write-clean-code-lessons-learnt-from-the-clean-code-robert-c-martin-9ffc7aef870c">Medium.</a></em></p>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</section>

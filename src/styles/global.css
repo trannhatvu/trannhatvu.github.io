@@ -156,6 +156,10 @@ h1, h2, h3, p { margin-top: 0; }
 .prose :not(pre) > code { font: .85em var(--font-mono); color: var(--accent); padding: 3px 5px; border-radius: 3px; background: var(--soft); overflow-wrap: anywhere; }
 .prose pre { padding: 44px 20px 20px; margin: 24px 0; font: 12px/1.9 var(--font-mono); border: 1px solid var(--line); border-radius: 5px; overflow-x: auto; max-width: 100%; tab-size: 2; }
 .prose pre code { display: block; width: max-content; min-width: 100%; }
+.prose pre.astro-code { padding: 18px 0; }
+.prose pre.astro-code code { counter-reset: code-line; }
+.prose pre.astro-code .line { display: inline-block; min-width: 100%; min-height: 1.9em; padding-right: 1rem; box-sizing: border-box; }
+.prose pre.astro-code .line::before { content: counter(code-line); counter-increment: code-line; display: inline-block; width: 3.5rem; margin-right: 1rem; padding-right: .8rem; border-right: 1px solid var(--line); color: var(--muted) !important; background: transparent !important; text-align: right; user-select: none; }
 [data-theme="dark"] .astro-code, [data-theme="dark"] .astro-code span { color: var(--shiki-dark) !important; background-color: var(--shiki-dark-bg) !important; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) .astro-code, :root:not([data-theme]) .astro-code span { color: var(--shiki-dark) !important; background-color: var(--shiki-dark-bg) !important; }

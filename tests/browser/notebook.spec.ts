@@ -7,7 +7,7 @@ test('homepage is readable and navigable at desktop and mobile widths', async ({
   page.on('request', request => requests.push(request.url()));
   await page.goto('/');
   await expect(page).toHaveURL(/\/en\/$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Make it work.Understand why.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Code, curiosity,and life abroad.');
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
   await page.getByRole('heading', { level: 1 }).click();
@@ -66,9 +66,8 @@ test('search finds English posts, handles no results, and clears cleanly', async
 test('Vietnamese search uses its own index and supports accented queries', async ({ page }) => {
   await page.goto('/vi/search/');
   await page.getByRole('searchbox').fill('kiểm tra');
-  await expect(page.locator('.search-results li')).toHaveCount(1);
-  await expect(page.locator('.search-results')).toContainText('Một pipeline GitLab CI nhỏ');
-  await expect(page.locator('.search-results a')).toHaveAttribute('href', '/vi/writing/gitlab-ci-first-pipeline/');
+  await expect(page.locator('.search-results li').first()).toBeVisible();
+  await expect(page.locator('.search-results a[href="/vi/writing/gitlab-ci-first-pipeline/"]')).toContainText('Một pipeline GitLab CI nhỏ');
 });
 
 test('search reports an index loading failure explicitly', async ({ page }) => {
@@ -101,6 +100,26 @@ test('articles render diagrams, copy exact code, and link only real translations
   await expect(page.locator('.translation-link')).toHaveCount(0);
   await expect(page.locator('.language-link')).toHaveCount(0);
   expect(errors).toEqual([]);
+});
+
+test('migrated article snippets have syntax highlighting and numbered lines', async ({ page }) => {
+  for (const { slug, language, count } of [
+    { slug: 'c-su-dung-callback-voi-template', language: 'cpp', count: 2 },
+    { slug: 'lam-the-nao-de-viet-code-sach-nhung-bai-hoc-tu-the-clean-code-cua-robert-c-martin', language: 'java', count: 2 },
+    { slug: 'gioi-thieu-tong-quan-design-pattern-trong-c', language: 'cpp', count: 5 },
+    { slug: 'python-nhung-sai-lam-thuong-gap-cua-newbie-part-1', language: 'python', count: 8 },
+  ]) {
+    await page.goto(`/vi/writing/${slug}/`);
+    const snippets = page.locator(`pre.astro-code[data-language="${language}"]`);
+    await expect(snippets).toHaveCount(count);
+    const firstLine = snippets.first().locator('.line').first();
+    const numberingStyles = await firstLine.evaluate(line => {
+      const style = getComputedStyle(line, '::before');
+      return { content: style.content, increment: style.counterIncrement };
+    });
+    expect(numberingStyles).toEqual({ content: 'counter(code-line)', increment: 'code-line 1' });
+    expect(await snippets.first().locator('.line').count()).toBeGreaterThan(1);
+  }
 });
 
 test('content remains usable without JavaScript', async ({ browser }) => {

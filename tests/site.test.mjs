@@ -26,11 +26,13 @@ test('English and Vietnamese core routes are generated with the correct language
   }
   assert.match(read('index.html'), /http-equiv="refresh" content="0;url=\/en\/"/);
   assert.ok(existsSync(new URL('404.html', root)));
+  assert.match(read('en/index.html'), /Raini’s Petit Coin/);
+  assert.match(read('index.html'), /Raini’s Petit Coin/);
 });
 
 test('all generated local links, assets, and heading anchors resolve', () => {
   for (const file of htmlFiles) {
-    const html = readFileSync(file, 'utf8');
+    const html = readFileSync(file, 'utf8').replace(/<template\b[^>]*>[\s\S]*?<\/template>/gi, '');
     const pathname = '/' + file.slice(root.pathname.length).replace(/index\.html$/, '');
     for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const target = new URL(match[1].replaceAll('&amp;', '&'), `https://trannhatvu.github.io${pathname}`);
@@ -55,12 +57,59 @@ test('only actual translations get reciprocal article links', () => {
   assert.doesNotMatch(read('en/writing/bash-scripts-that-fail-clearly/index.html'), /class="translation-link"/);
 });
 
-test('drafts never leak and notes stay separate from tutorial archives', () => {
+test('drafts never leak and notes stay separate from writing archives', () => {
   for (const file of htmlFiles) assert.doesNotMatch(readFileSync(file, 'utf8'), /Unpublished draft fixture/);
   assert.ok(!existsSync(new URL('en/notes/unpublished-example/index.html', root)));
   assert.doesNotMatch(read('en/writing/index.html'), /A green log is not an exit code/);
   assert.match(read('en/notes/index.html'), /A green log is not an exit code/);
   assert.doesNotMatch(read('vi/writing/index.html'), /Write Bash scripts that fail clearly/);
+});
+
+test('all migrated WordPress articles and their authorized images are published locally', () => {
+  const writingDir = new URL('../src/content/writing/vi/', import.meta.url);
+  const migratedSlugs = readdirSync(writingDir)
+    .filter(filename => filename.endsWith('.md'))
+    .filter(filename => readFileSync(new URL(filename, writingDir), 'utf8').includes('translationKey: "wordpress-'))
+    .map(filename => filename.slice(0, -3));
+  assert.equal(migratedSlugs.length, 8);
+  for (const slug of [
+    'pokemon-go-niantic-labs-co-ke-hoach-hoan-thien-them-truoc-khi-gioi-thieu-nhieu-hon',
+    'co-vay-chien-thang-cuoi-cung-4-1-danh-cho-alphago-truoc-lee-sedol',
+    'ovn-logical-flows-va-ovn-trace',
+    'openstack-sdn-with-ovn-part-2-network-engineering-analysis',
+    'gioi-thieu-ve-bagpipe',
+    'ovn-gateway-high-availability-plan',
+    'pycharm-settings-repository',
+    'giai-ngo-entry-points-trong-python',
+  ]) assert.ok(!existsSync(new URL(`vi/writing/${slug}/index.html`, root)), `${slug} should be removed`);
+  for (const slug of migratedSlugs) {
+    const article = read(`vi/writing/${slug}/index.html`);
+    assert.match(article, /<html[^>]+lang="vi"/);
+    assert.match(article, /class="eyebrow">Bài viết<\/p>/);
+    assert.doesNotMatch(article, /<img\b[^>]*\bsrc="https?:\/\//i, `${slug} should not embed remote images`);
+    assert.doesNotMatch(article, /<img\b[^>]*\bsrcset=/i, `${slug} should not retain WordPress srcset URLs`);
+    for (const match of article.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/gi)) {
+      assert.match(match[1], /^\/images\/wordpress\//, `${slug} should use an authorized local image`);
+    }
+  }
+  for (const image of [
+    'screen-shot-2016-02-29-at-10-08-14-am.png',
+    '67d82-1-4gyjqwwkhbhw7mbx5pbkw.png',
+    'cleancode.png',
+    'wp.png',
+    'python.png',
+    'wannacry-android.jpg',
+  ]) assert.ok(existsSync(new URL(`images/wordpress/${image}`, root)), `Missing migrated media: ${image}`);
+  for (const image of [
+    'pokemon-gp.jpg',
+    'pokemon-go-1000x566.jpg',
+    'goban-680x383.jpg',
+    'ovn.png',
+    'bagpipe-neutron-networks-ml2.png',
+    'bagpipe-neutron-bgpvpn-interconnection.png',
+  ]) {
+    assert.ok(!existsSync(new URL(`images/wordpress/${image}`, root)), `Removed post media should not be published: ${image}`);
+  }
 });
 
 test('code, diagrams, metadata, and bilingual static search are built', () => {
@@ -73,6 +122,20 @@ test('code, diagrams, metadata, and bilingual static search are built', () => {
   const searchFiles = files(new URL('pagefind/', root).pathname);
   assert.ok(searchFiles.some(path => /\/pagefind\.en_/.test(path)), 'English search index');
   assert.ok(searchFiles.some(path => /\/pagefind\.vi_/.test(path)), 'Vietnamese search index');
+});
+
+test('migrated article snippets use syntax-highlighted Shiki code blocks', () => {
+  for (const { slug, language, count, legacyMarkup } of [
+    { slug: 'c-su-dung-callback-voi-template', language: 'cpp', count: 2, legacyMarkup: /wp-block-syntaxhighlighter-code/ },
+    { slug: 'lam-the-nao-de-viet-code-sach-nhung-bai-hoc-tu-the-clean-code-cua-robert-c-martin', language: 'java', count: 2, legacyMarkup: /js-file-line-container/ },
+    { slug: 'gioi-thieu-tong-quan-design-pattern-trong-c', language: 'cpp', count: 5, legacyMarkup: /js-file-line-container/ },
+    { slug: 'python-nhung-sai-lam-thuong-gap-cua-newbie-part-1', language: 'python', count: 8, legacyMarkup: /class="(?:k|nf|p|n|o|mi|mf|bp|c)"/ },
+  ]) {
+    const article = read(`vi/writing/${slug}/index.html`);
+    assert.equal((article.match(new RegExp(`data-language="${language}"`, 'g')) ?? []).length, count, slug);
+    assert.match(article, new RegExp(`<pre class="astro-code[^"]*"[^>]*data-language="${language}"><code><span class="line">`), slug);
+    assert.doesNotMatch(article, legacyMarkup, `${slug} should not retain old code markup`);
+  }
 });
 
 test('deployment checks and tests the exact artifact before publishing', () => {

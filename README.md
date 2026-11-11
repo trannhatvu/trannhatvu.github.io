@@ -1,19 +1,23 @@
-# Engineering notebook
+# Raini’s Petit Coin
 
-A bilingual, static personal blog built with Astro, TypeScript, Tailwind CSS,
-Markdown/MDX, Pagefind, and Mermaid. No database, paid API, cookies, or analytics.
-The layout is an original lightweight theme rather than a fork of AstroPaper.
+A bilingual, static personal blog about code, technology, everyday discoveries,
+and life abroad. Built with Astro, TypeScript, Tailwind CSS, Markdown/MDX,
+Pagefind, and Mermaid. No database, paid API, cookies, or analytics. The layout
+is an original lightweight theme rather than a fork of AstroPaper.
 
 ## Run locally
 
-Use Node **22.23.4 or newer** (`nvm use` if you use nvm).
+Use Node **22.23.4 or newer** for direct npm commands (`nvm use` if you use nvm).
+Install [Just](https://just.systems/) to use the shortcuts below.
+Just runs its recipes with the pinned Node 22.23.4 runtime, even if your system
+Node is older. The first run may download Node and npm through `npm exec`.
 
 ```sh
-npm ci
-npm run dev
+just install
+just dev
 ```
 
-If the machine has an older Node and you do not use nvm, run the project under a
+If you prefer direct npm commands on a machine with older Node, run them under a
 temporary, project-compatible runtime without changing the system installation:
 
 ```sh
@@ -22,13 +26,18 @@ npm exec --yes --package=node@22.23.4 --package=npm@10 --call 'npm ci && npm run
 
 The same wrapper can run `npm run check`, `npm run build`, or `npm run preview`.
 
-For the complete site, including search:
+Common helpers:
 
 ```sh
-npm run check
-npm run build
-npm test
-npm run preview
+just                 # list available recipes
+just check           # type-check
+just build           # build site and search index
+just test            # build, then run static-site tests
+just browser-install # install Chromium once for browser tests
+just test-browser    # build, then run browser tests
+just verify          # type-check, build, and run static tests
+just verify-browser  # run all checks, including browser tests
+just preview         # build, then preview the production site
 ```
 
 Open the address printed by Astro. Search is generated after the production build,
@@ -36,7 +45,7 @@ so development mode displays an explanatory message instead of a broken index.
 
 ## Personalize before publishing
 
-- Edit your name and `portrait` path in [src/lib/site.ts](src/lib/site.ts).
+- Edit your display name and `portrait` path in [src/lib/site.ts](src/lib/site.ts).
   Put your own photo in `public/images/` and use `/images/your-photo.webp`.
   Initials are deliberately used until a real portrait is provided.
 - Update both versions of the About page text in [src/lib/site.ts](src/lib/site.ts).
@@ -70,6 +79,8 @@ starter: false
 ```
 
 - Use `kind: note` for the separate Notes feed.
+- Use `kind: article` for essays and general writing; both articles and tutorials
+  appear in Writing.
 - Filenames become URLs: `en/example.md` becomes `/en/writing/example/`
   (or `/en/notes/example/` for a note).
 - Use URL-safe, lowercase filenames. Keep tags consistently named.
@@ -83,7 +94,8 @@ starter: false
 
 ### Code, diagrams, and images
 
-Fenced code blocks with a language get syntax highlighting and copy buttons.
+Fenced code blocks with a language get Shiki syntax highlighting, line numbers,
+and copy buttons. For example, use `cpp` after the opening fence for C++.
 Use a `mermaid` fence for diagrams; Mermaid loads only when a diagram is present.
 Invalid diagrams show an explicit error and preserve their source.
 
@@ -96,6 +108,10 @@ and provide meaningful alt text. For a caption, use:
   <figcaption>The smallest useful pipeline: one check stage.</figcaption>
 </figure>
 ```
+
+The 8 remaining migrated WordPress posts are in the Vietnamese archive. The
+6 retained authorized WordPress uploads are stored locally in
+`public/images/wordpress/`; images from other sources remain links.
 
 ## Deploy to GitHub Pages
 
