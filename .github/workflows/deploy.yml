@@ -17,6 +17,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      options: --init --ipc=host
     permissions:
       contents: read
       pages: read
@@ -36,8 +39,6 @@ jobs:
         run: npm run build
       - name: Test generated site
         run: npm test
-      - name: Install test browser
-        run: npx playwright install --with-deps chromium
       - name: Test reader interactions
         run: npm run test:browser
       - name: Configure Pages

@@ -151,7 +151,9 @@ search output, and the deployment workflow. Build before running it.
 Manually check search in both languages, mobile navigation, keyboard focus,
 light/dark persistence, copy buttons, and diagram rendering after UI changes.
 
-Automated Chromium coverage is also available and runs in the deployment workflow:
+Automated Chromium coverage runs in the deployment workflow using the official
+Playwright image matching the locked package version, with browser and OS
+dependencies preinstalled. For local testing:
 
 ```sh
 npx playwright install chromium

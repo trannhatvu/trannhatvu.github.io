@@ -149,9 +149,13 @@ test('migrated article snippets use syntax-highlighted Shiki code blocks', () =>
 test('deployment checks and tests the exact artifact before publishing', () => {
   const workflow = readFileSync(new URL('../.github/workflows/deploy.yml', import.meta.url), 'utf8');
   const config = parse(workflow);
+  const lockfile = JSON.parse(readFileSync(new URL('../package-lock.json', import.meta.url), 'utf8'));
   for (const step of ['npm ci', 'npm run check', 'npm run build', 'npm test', 'actions/deploy-pages@']) assert.ok(workflow.includes(step));
   assert.match(workflow, /path: dist/);
   assert.match(workflow, /needs: build/);
+  assert.equal(config.jobs.build.container.image, `mcr.microsoft.com/playwright:v${lockfile.packages['node_modules/@playwright/test'].version}-noble`);
+  assert.match(config.jobs.build.container.options, /--ipc=host/);
+  assert.doesNotMatch(workflow, /playwright install --with-deps/);
   assert.deepEqual(config.on.pull_request.branches, ['main']);
   assert.equal(config.jobs.deploy.if, "github.ref == 'refs/heads/main'");
   for (const name of ['Configure Pages', 'Upload site']) {
