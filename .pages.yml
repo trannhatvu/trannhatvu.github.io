@@ -1,0 +1,80 @@
+media:
+  - name: writing_images
+    label: Writing images
+    input: public/images
+    output: /images
+    categories:
+      - image
+    extensions:
+      - jpg
+      - jpeg
+      - png
+      - webp
+      - gif
+    rename: safe
+content:
+  - name: writing
+    label: Writing
+    type: collection
+    path: src/content/writing
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: description
+        type: text
+        required: true
+      - name: date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: lang
+        type: select
+        required: true
+        options:
+          values:
+            - name: en
+              label: English
+            - name: vi
+              label: Tiếng Việt
+      - name: kind
+        type: select
+        required: true
+        options:
+          values:
+            - article
+            - tutorial
+            - note
+      - name: tags
+        type: string
+        list: true
+        required: true
+      - name: draft
+        type: boolean
+        default: false
+      - name: starter
+        type: boolean
+        default: false
+      - name: body
+        label: Content
+        type: rich-text
+        options:
+          format: markdown
+          media: writing_images
+          path: writing
+    view:
+      fields:
+        - title
+        - date
+        - kind
+        - draft
+      primary: title
+      sort:
+        - date
+        - title
+      default:
+        sort: date
+        order: desc
