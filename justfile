@@ -12,6 +12,9 @@ dev:
 check:
     {{node22}} 'npm run check'
 
+pages-config:
+    {{node22}} 'npm run pages:config'
+
 build:
     {{node22}} 'npm run build'
 
