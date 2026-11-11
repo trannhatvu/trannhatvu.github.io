@@ -9,7 +9,7 @@ const writing = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     lang: z.enum(['en', 'vi']),
-    kind: z.enum(['tutorial', 'note']),
+    kind: z.enum(['article', 'tutorial', 'note']),
     tags: z.array(z.string()).min(1),
     translationKey: z.string(),
     draft: z.boolean().default(false),

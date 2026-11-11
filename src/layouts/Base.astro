@@ -52,8 +52,8 @@ const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
     <a class="skip-link" href="#main">{t.skip}</a>
     <header class="site-header">
       <a class="brand" href={`/${lang}/`} aria-label={`${site.name} — ${site.title}`}>
-        <span class="brand-mark" aria-hidden="true">nv<span>.</span></span>
-        <span class="brand-name">{site.name}<span class="brand-subtitle">engineering notebook</span></span>
+        <span class="brand-mark" aria-hidden="true">r<span>.</span></span>
+        <span class="brand-name">{site.name}<span class="brand-subtitle">personal blog</span></span>
       </a>
       <nav aria-label={lang === 'en' ? 'Main navigation' : 'Điều hướng chính'}>
         {(['writing', 'notes', 'about'] as const).map(section => (

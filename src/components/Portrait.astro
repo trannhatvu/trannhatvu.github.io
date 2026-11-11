@@ -6,5 +6,5 @@ const { lang, large = false } = Astro.props;
 <div class:list={['portrait', { 'portrait-large': large }]}>
   {site.portrait
     ? <img src={site.portrait} alt={site.name} width="160" height="160" />
-    : <span role="img" aria-label={text[lang].photo}>NV<span class="portrait-dot" aria-hidden="true"></span></span>}
+    : <span role="img" aria-label={text[lang].photo}>R<span class="portrait-dot" aria-hidden="true"></span></span>}
 </div>

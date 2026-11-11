@@ -7,7 +7,7 @@ export function getStaticPaths() { return languages.map(lang => ({ params: { lan
 const lang = Astro.params.lang as Language;
 const t = text[lang];
 const entries = await published(lang);
-const tutorials = entries.filter(entry => entry.data.kind === 'tutorial');
+const writing = entries.filter(entry => entry.data.kind !== 'note');
 const notes = entries.filter(entry => entry.data.kind === 'note');
 const topics = [...new Set(entries.flatMap(entry => entry.data.tags))].sort();
 ---
@@ -34,7 +34,7 @@ const topics = [...new Set(entries.flatMap(entry => entry.data.tags))].sort();
   </section>
   <section class="writing-section">
     <div class="section-heading"><h2><span class="section-index">01 /</span>{t.latest}</h2><a class="subtle-link" href={`/${lang}/writing/`}>{t.allWriting} <span aria-hidden="true">→</span></a></div>
-    <div class="entry-list">{tutorials.length ? tutorials.slice(0, 3).map(entry => <EntryCard entry={entry} />) : <p class="empty-state">{t.empty}</p>}</div>
+    <div class="entry-list">{writing.length ? writing.slice(0, 3).map(entry => <EntryCard entry={entry} />) : <p class="empty-state">{t.empty}</p>}</div>
   </section>
   <section class="notes-section">
     <div class="section-heading"><h2><span class="section-index">02 /</span>{t.recentNotes}</h2><a class="subtle-link" href={`/${lang}/notes/`}>{t.allNotes} <span aria-hidden="true">→</span></a></div>

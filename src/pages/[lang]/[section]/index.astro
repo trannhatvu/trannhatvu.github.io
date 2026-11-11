@@ -8,7 +8,7 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Language;
 const section = Astro.params.section as 'writing' | 'notes';
 const t = text[lang];
-const entries = (await published(lang)).filter(entry => entry.data.kind === (section === 'notes' ? 'note' : 'tutorial'));
+const entries = (await published(lang)).filter(entry => section === 'notes' ? entry.data.kind === 'note' : entry.data.kind !== 'note');
 const topics = [...new Set(entries.flatMap(entry => entry.data.tags))].sort();
 ---
 <Base lang={lang} title={t[section]} alternate={`/${lang === 'en' ? 'vi' : 'en'}/${section}/`}>

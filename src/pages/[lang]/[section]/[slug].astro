@@ -19,7 +19,7 @@ const toc = headings.filter(heading => heading.depth === 2 || heading.depth === 
   <a class="subtle-link article-back" href={`/${lang}/${entry.data.kind === 'note' ? 'notes' : 'writing'}/`}>← {entry.data.kind === 'note' ? t.allNotes : t.back}</a>
   <article class="article-shell" data-pagefind-body data-copy={t.copy} data-copied={t.copied} data-copy-error={t.copyError} data-diagram-error={t.diagramError}>
     <header class="article-heading">
-      <p class="eyebrow">{entry.data.kind === 'note' ? t.note : t.tutorial}</p>
+      <p class="eyebrow">{entry.data.kind === 'note' ? t.note : entry.data.kind === 'article' ? t.article : t.tutorial}</p>
       <h1 data-pagefind-meta="title">{entry.data.title}</h1>
       <p class="article-description" data-pagefind-meta="description">{entry.data.description}</p>
       <div class="entry-meta"><time datetime={entry.data.date.toISOString()}>{dateLabel(entry.data.date, lang)}</time><span aria-hidden="true">/</span><span>{readingTime(entry)} {t.minute}</span></div>
