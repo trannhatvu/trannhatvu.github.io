@@ -4,20 +4,17 @@ import { site, text, type Language } from '../lib/site';
 interface Props {
   title?: string;
   description?: string;
-  lang: Language;
-  alternate?: string;
+  lang?: Language;
   article?: boolean;
   noindex?: boolean;
 }
-const { title, description = text[Astro.props.lang].description, lang, alternate, article = false, noindex = false } = Astro.props;
-const t = text[lang];
-const other = lang === 'en' ? 'vi' : 'en';
+const { title, description = text.description, lang = 'en', article = false, noindex = false } = Astro.props;
 const pathname = Astro.url.pathname;
 const canonical = new URL(pathname, Astro.site);
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.title}`;
 ---
 <!doctype html>
-<html lang={lang} data-pagefind-filter={`language:${lang}`}>
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,16 +24,12 @@ const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
     <title>{pageTitle}</title>
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    {alternate && <>
-      <link rel="alternate" hreflang={lang} href={canonical} />
-      <link rel="alternate" hreflang={other} href={new URL(alternate, Astro.site)} />
-    </>}
     <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:site_name" content={site.title} />
-    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'vi_VN'} />
+    <meta property="og:locale" content={lang === 'vi' ? 'vi_VN' : 'en_US'} />
     <script is:inline>
       (() => {
         let preference;
@@ -49,32 +42,31 @@ const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#main">{t.skip}</a>
+    <a class="skip-link" href="#main">{text.skip}</a>
     <header class="site-header">
-      <a class="brand" href={`/${lang}/`} aria-label={`${site.name} — ${site.title}`}>
+      <a class="brand" href="/" aria-label={`${site.name} — ${site.title}`}>
         <span class="brand-mark" aria-hidden="true">r<span>.</span></span>
         <span class="brand-name">{site.name}<span class="brand-subtitle">personal blog</span></span>
       </a>
-      <nav aria-label={lang === 'en' ? 'Main navigation' : 'Điều hướng chính'}>
+      <nav lang="en" aria-label="Main navigation">
         {(['writing', 'notes', 'about'] as const).map(section => (
-          <a href={`/${lang}/${section}/`} aria-current={pathname.startsWith(`/${lang}/${section}/`) ? 'page' : undefined}>{t[section]}</a>
+          <a href={`/${section}/`} aria-current={pathname.startsWith(`/${section}/`) ? 'page' : undefined}>{text[section]}</a>
         ))}
       </nav>
       <div class="header-tools">
-        <a class="icon-button search-link" href={`/${lang}/search/`} aria-label={t.search} title={t.search}>
+        <a class="icon-button search-link" href="/search/" aria-label={text.search} title={text.search}>
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 4.5 4.5" /></svg>
         </a>
-        <button class="icon-button theme-toggle" type="button" aria-label={t.theme} title={t.theme} aria-pressed="false" hidden>
+        <button class="icon-button theme-toggle" type="button" aria-label={text.theme} title={text.theme} aria-pressed="false" hidden>
           <svg class="sun-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
           <svg class="moon-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" /></svg>
         </button>
-        {alternate && <a class="language-link" href={alternate} lang={other} hreflang={other} aria-label={t.language}>{other.toUpperCase()}</a>}
       </div>
     </header>
     <main id="main" class="site-main" tabindex="-1"><slot /></main>
     <footer class="site-footer">
-      <div><a href={`/${lang}/`}>{site.name}<span class="accent">.</span></a><p>{t.footer}</p></div>
-      <span class="footer-label">© {new Date().getFullYear()} · {lang === 'en' ? 'A work in progress' : 'Luôn tiếp tục hoàn thiện'}</span>
+      <div><a href="/">{site.name}<span class="accent">.</span></a><p>{text.footer}</p></div>
+      <span class="footer-label">© {new Date().getFullYear()} · A work in progress</span>
     </footer>
     <script>
       const toggle = document.querySelector<HTMLButtonElement>('.theme-toggle');

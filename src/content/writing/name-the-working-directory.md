@@ -5,7 +5,6 @@ date: 2026-11-06
 lang: en
 kind: note
 tags: ["Scripting"]
-translationKey: name-the-working-directory
 starter: true
 ---
 

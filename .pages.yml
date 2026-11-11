@@ -13,10 +13,10 @@ media:
       - gif
     rename: safe
 content:
-  - name: writing-en
-    label: Writing (English)
+  - name: writing
+    label: Writing
     type: collection
-    path: src/content/writing/en
+    path: src/content/writing
     format: yaml-frontmatter
     filename: "{primary}.md"
     fields:
@@ -38,70 +38,6 @@ content:
           values:
             - name: en
               label: English
-      - name: kind
-        type: select
-        required: true
-        options:
-          values:
-            - article
-            - tutorial
-            - note
-      - name: tags
-        type: string
-        list: true
-        required: true
-      - name: translationKey
-        type: string
-        required: true
-      - name: draft
-        type: boolean
-        default: false
-      - name: starter
-        type: boolean
-        default: false
-      - name: body
-        label: Content
-        type: rich-text
-        options:
-          format: markdown
-          media: writing_images
-          path: writing
-    view:
-      fields:
-        - title
-        - date
-        - kind
-        - draft
-      primary: title
-      sort:
-        - date
-        - title
-      default:
-        sort: date
-        order: desc
-  - name: writing-vi
-    label: Bài viết (Tiếng Việt)
-    type: collection
-    path: src/content/writing/vi
-    format: yaml-frontmatter
-    filename: "{primary}.md"
-    fields:
-      - name: title
-        type: string
-        required: true
-      - name: description
-        type: text
-        required: true
-      - name: date
-        type: date
-        required: true
-        options:
-          format: yyyy-MM-dd
-      - name: lang
-        type: select
-        required: true
-        options:
-          values:
             - name: vi
               label: Tiếng Việt
       - name: kind
@@ -116,9 +52,6 @@ content:
         type: string
         list: true
         required: true
-      - name: translationKey
-        type: string
-        required: true
       - name: draft
         type: boolean
         default: false
@@ -126,7 +59,7 @@ content:
         type: boolean
         default: false
       - name: body
-        label: Nội dung
+        label: Content
         type: rich-text
         options:
           format: markdown

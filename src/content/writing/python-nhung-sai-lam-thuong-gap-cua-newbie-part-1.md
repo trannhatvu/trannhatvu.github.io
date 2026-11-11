@@ -5,13 +5,12 @@ date: 2017-08-25
 lang: vi
 kind: article
 tags: ["Công nghệ"]
-translationKey: "wordpress-558"
 draft: false
 starter: false
 ---
 
 
-<div class="wp-block-image"><figure class="aligncenter size-large is-resized"><a href="/images/wordpress/python.png"><img loading="lazy" data-attachment-id="556" data-permalink="https://rainipetitcoin.wordpress.com/2017/08/25/giai-ngo-entry-points-trong-python/python/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2017/08/python.png" data-orig-size="651,651" data-comments-opened="1" data-image-title="Python" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2017/08/python.png?w=651" src="/images/wordpress/python.png" alt="" class="wp-image-556" width="166" height="166" /></a></figure></div>
+<div class="wp-block-image"><figure class="aligncenter size-large is-resized"><a href="/images/python-snake-illustration.png"><img loading="lazy" data-attachment-id="556" data-permalink="https://rainipetitcoin.wordpress.com/2017/08/25/giai-ngo-entry-points-trong-python/python/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2017/08/python.png" data-orig-size="651,651" data-comments-opened="1" data-image-title="Python" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2017/08/python.png?w=651" src="/images/python-snake-illustration.png" alt="" class="wp-image-556" width="166" height="166" /></a></figure></div>
 
 
 <div class="center">

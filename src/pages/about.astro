@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import Portrait from '../components/Portrait.astro';
+import { site, text } from '../lib/site';
+---
+<Base title={text.about}>
+  <header class="page-heading"><p class="eyebrow">{text.about} / {site.name}</p><h1>{text.aboutTitle}</h1><p>{text.aboutLead}</p></header>
+  <section class="about-layout">
+    <Portrait large />
+    <div class="prose"><p>{text.aboutBody}</p><p>{text.aboutSecond}</p><a class="text-link" href="/writing/">{text.browse} ↗</a></div>
+  </section>
+</Base>

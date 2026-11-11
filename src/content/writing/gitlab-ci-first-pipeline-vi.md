@@ -5,7 +5,6 @@ date: 2026-11-10
 lang: vi
 kind: tutorial
 tags: ["GitLab CI", "Automation"]
-translationKey: gitlab-ci-first-pipeline
 starter: true
 ---
 

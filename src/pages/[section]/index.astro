@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import { published, tagSlug, text } from '../../lib/site';
+export function getStaticPaths() {
+  return ['writing', 'notes'].map(section => ({ params: { section } }));
+}
+const section = Astro.params.section as 'writing' | 'notes';
+const entries = (await published()).filter(entry => section === 'notes' ? entry.data.kind === 'note' : entry.data.kind !== 'note');
+const topics = [...new Set(entries.flatMap(entry => entry.data.tags))].sort();
+---
+<Base title={text[section]}>
+  <header class="page-heading"><p class="eyebrow">THE NOTEBOOK / {section.toUpperCase()}</p><h1>{text[section]}<span class="accent">.</span></h1><p>{section === 'notes' ? text.notesDescription : text.writingDescription}</p></header>
+  <div class="topic-links archive-topics">{topics.map(tag => <a href={`/tags/${tagSlug(tag)}/`}>{tag}<span aria-hidden="true">↗</span></a>)}</div>
+  <div class="entry-list">{entries.length ? entries.map(entry => <EntryCard entry={entry} />) : <p class="empty-state">{text.empty}</p>}</div>
+</Base>

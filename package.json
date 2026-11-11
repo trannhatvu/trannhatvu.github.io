@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
     "check": "astro check && npm run pages:config:check",
-    "build": "astro build && pagefind --site dist",
+    "build": "astro build && pagefind --site dist --force-language en",
     "pages:config": "node scripts/generate-pages-config.mjs",
     "pages:config:check": "node scripts/generate-pages-config.mjs --check",
     "preview": "astro preview --host 127.0.0.1",

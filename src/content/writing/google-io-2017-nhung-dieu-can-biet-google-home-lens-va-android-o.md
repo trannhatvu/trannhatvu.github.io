@@ -5,7 +5,6 @@ date: 2017-05-19
 lang: vi
 kind: article
 tags: ["Dịch"]
-translationKey: "wordpress-168"
 draft: false
 starter: false
 ---

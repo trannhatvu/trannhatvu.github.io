@@ -5,7 +5,6 @@ date: 2026-11-10
 lang: en
 kind: note
 tags: ["Scripting"]
-translationKey: unpublished-example
 draft: true
 ---
 

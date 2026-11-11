@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryCard from '../../components/EntryCard.astro';
+import { published, tagSlug, text } from '../../lib/site';
+export async function getStaticPaths() {
+  const entries = await published();
+  const tags = [...new Set(entries.flatMap(entry => entry.data.tags))];
+  return tags.map(tag => ({ params: { tag: tagSlug(tag) }, props: { tag } }));
+}
+const { tag } = Astro.props;
+const entries = (await published()).filter(entry => entry.data.tags.includes(tag));
+---
+<Base title={`${text.tagged}: ${tag}`}>
+  <header class="page-heading"><p class="eyebrow">{text.tagged}</p><h1>{tag}<span class="accent">.</span></h1><p>{entries.length} entries in the notebook</p></header>
+  <a class="subtle-link" href="/writing/">← {text.allWriting}</a>
+  <div class="entry-list tag-entries">{entries.map(entry => <EntryCard entry={entry} />)}</div>
+</Base>

@@ -5,14 +5,13 @@ date: 2017-05-16
 lang: vi
 kind: article
 tags: ["Dịch"]
-translationKey: "wordpress-98"
 draft: false
 starter: false
 ---
 
 <p style="text-align:justify;"><strong>Cũng như tất cả thiết bị chạy Windows, rất nhiều smartphone và tablet Android đang sử dụng các phiên bản hệ điều hành di động cũ. Tuy nhiên, hệ điều hành này của Google có một số biện pháp bảo vệ tạo điều kiện trú ẩn cho ransomware như là WannaCry.</strong></p>
 <section id="content" class="add-content hentry">
-<p class="social-img-btn"><img loading="lazy" data-attachment-id="161" data-permalink="https://rainipetitcoin.wordpress.com/2017/05/16/wannacry-tai-sao-android-lai-la-noi-tru-an-truoc-ransomware/wannacry-android/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2017/05/wannacry-android.jpg" data-orig-size="1268,664" data-comments-opened="1" data-image-title="Wannacry-android" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2017/05/wannacry-android.jpg?w=1024" class="size-full wp-image-161 aligncenter" src="/images/wordpress/wannacry-android.jpg" alt="Wannacry-android" width="1268" height="664" /></p>
+<p class="social-img-btn"><img loading="lazy" data-attachment-id="161" data-permalink="https://rainipetitcoin.wordpress.com/2017/05/16/wannacry-tai-sao-android-lai-la-noi-tru-an-truoc-ransomware/wannacry-android/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2017/05/wannacry-android.jpg" data-orig-size="1268,664" data-comments-opened="1" data-image-title="Wannacry-android" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2017/05/wannacry-android.jpg?w=1024" class="size-full wp-image-161 aligncenter" src="/images/android-wannacry-ransomware.jpg" alt="Wannacry-android" width="1268" height="664" /></p>
 </section>
 <p style="text-align:justify;">Cuối tuần trước, cuộc tấn công mạng WannaCry đã lây nhiễm hơn 300 000 máy tính tại 150 quốc gia khác nhau, dự trên một lỗ hổng trên các phiên bản cũ của Windows. Vấn đề về sự lỗi thời của phần mềm cũng hiện diện trên Android: gần một phần ba thiết bị chạy trên KitKat hay thậm chí là trên một phiên bản cũ hơn.</p>
 <section id="content" class="add-content hentry">

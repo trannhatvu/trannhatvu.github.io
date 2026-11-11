@@ -5,7 +5,6 @@ date: 2026-11-05
 lang: en
 kind: tutorial
 tags: ["Automation", "Scripting"]
-translationKey: automate-the-check-not-the-mistake
 starter: true
 ---
 

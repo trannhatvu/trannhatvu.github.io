@@ -8,7 +8,6 @@ lang: vi
 kind: article
 tags:
   - C++
-translationKey: wordpress-906
 draft: false
 starter: false
 ---

@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 import { writingSchema } from './content/writing-schema.mjs';
 
 const writing = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/writing' }),
+  loader: glob({ pattern: '*.{md,mdx}', base: './src/content/writing' }),
   schema: writingSchema,
 });
 

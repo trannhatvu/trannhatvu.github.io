@@ -16,19 +16,31 @@ function files(directory) {
 const htmlFiles = files(root.pathname).filter(path => path.endsWith('.html'));
 const read = path => readFileSync(new URL(path, root), 'utf8');
 
-test('English and Vietnamese core routes are generated with the correct language', () => {
-  for (const lang of ['en', 'vi']) {
-    for (const route of ['', 'writing/', 'notes/', 'about/', 'search/']) {
-      const html = read(`${lang}/${route}index.html`);
-      assert.match(html, new RegExp(`<html[^>]+lang="${lang}"`));
-      assert.match(html, new RegExp(`rel="canonical" href="https://trannhatvu.github.io/${lang}/${route}"`));
-      assert.match(html, /href="#main"/);
-    }
+test('language-neutral core routes are generated at the site root', () => {
+  for (const route of ['', 'writing/', 'notes/', 'about/', 'search/']) {
+    const path = route ? `${route}index.html` : 'index.html';
+    const html = read(path);
+    assert.match(html, /<html[^>]+lang="en"/);
+    assert.match(html, new RegExp(`rel="canonical" href="https://trannhatvu\\.github\\.io/${route}"`));
+    assert.match(html, /href="#main"/);
+    assert.doesNotMatch(html, /hreflang|language-link|data-pagefind-filter/);
   }
-  assert.match(read('index.html'), /http-equiv="refresh" content="0;url=\/en\/"/);
+  assert.ok(!existsSync(new URL('en/index.html', root)), 'English routes should not use a language prefix');
+  assert.ok(!existsSync(new URL('vi/index.html', root)), 'Vietnamese routes should not be generated');
   assert.ok(existsSync(new URL('404.html', root)));
-  assert.match(read('en/index.html'), /Raini’s Petit Coin/);
   assert.match(read('index.html'), /Raini’s Petit Coin/);
+});
+
+test('content languages share routes without language-switch links', () => {
+  for (const file of htmlFiles) {
+    const html = readFileSync(file, 'utf8');
+    assert.doesNotMatch(html, /hreflang=|language-link|translation-link|data-pagefind-filter/, file);
+    assert.doesNotMatch(html, /href="\/(?:en|vi)\//, file);
+  }
+  assert.ok(!existsSync(new URL('en/', root)));
+  assert.ok(!existsSync(new URL('vi/', root)));
+  assert.match(read('writing/gitlab-ci-first-pipeline/index.html'), /<html[^>]+lang="en"/);
+  assert.match(read('writing/gitlab-ci-first-pipeline-vi/index.html'), /<html[^>]+lang="vi"/);
 });
 
 test('all generated local links, assets, and heading anchors resolve', () => {
@@ -50,36 +62,31 @@ test('all generated local links, assets, and heading anchors resolve', () => {
   }
 });
 
-test('only actual translations get reciprocal article links', () => {
-  const en = read('en/writing/gitlab-ci-first-pipeline/index.html');
-  const vi = read('vi/writing/gitlab-ci-first-pipeline/index.html');
-  assert.match(en, /class="translation-link" href="\/vi\/writing\/gitlab-ci-first-pipeline\/"/);
-  assert.match(vi, /class="translation-link" href="\/en\/writing\/gitlab-ci-first-pipeline\/"/);
-  assert.doesNotMatch(read('en/writing/bash-scripts-that-fail-clearly/index.html'), /class="translation-link"/);
+test('published articles have no language-switch or alternate-language links', () => {
+  const article = read('writing/gitlab-ci-first-pipeline/index.html');
+  assert.doesNotMatch(article, /translation-link|language-link|hreflang/);
 });
 
 test('drafts never leak and notes stay separate from writing archives', () => {
   for (const file of htmlFiles) assert.doesNotMatch(readFileSync(file, 'utf8'), /Unpublished draft fixture/);
-  assert.ok(!existsSync(new URL('en/notes/unpublished-example/index.html', root)));
-  assert.doesNotMatch(read('en/writing/index.html'), /A green log is not an exit code/);
-  assert.match(read('en/notes/index.html'), /A green log is not an exit code/);
-  assert.doesNotMatch(read('vi/writing/index.html'), /Write Bash scripts that fail clearly/);
+  assert.ok(!existsSync(new URL('notes/unpublished-example/index.html', root)));
+  assert.doesNotMatch(read('writing/index.html'), /A green log is not an exit code/);
+  assert.match(read('notes/index.html'), /A green log is not an exit code/);
 });
 
-test('all migrated WordPress articles and their authorized images are published locally', () => {
-  const writingDir = new URL('../src/content/writing/vi/', import.meta.url);
-  const migratedSlugs = readdirSync(writingDir)
-    .filter(filename => filename.endsWith('.md'))
-    .filter(filename => {
-      const source = readFileSync(new URL(filename, writingDir), 'utf8');
-      const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1];
-      if (frontmatter === undefined) return false;
-      const metadata = parse(frontmatter);
-      return typeof metadata?.translationKey === 'string'
-        && metadata.translationKey.startsWith('wordpress-');
-    })
-    .map(filename => filename.slice(0, -3));
-  assert.equal(migratedSlugs.length, 8);
+test('Vietnamese WordPress articles and their authorized images are published locally', () => {
+  const writingDir = new URL('../src/content/writing/', import.meta.url);
+  const migratedSlugs = [
+    'c-su-dung-callback-voi-template',
+    'gioi-thieu-tong-quan-design-pattern-trong-c',
+    'google-io-2017-nhung-dieu-can-biet-google-home-lens-va-android-o',
+    'lam-the-nao-de-viet-code-sach-nhung-bai-hoc-tu-the-clean-code-cua-robert-c-martin',
+    'python-nhung-sai-lam-thuong-gap-cua-newbie-part-1',
+    'tong-quan-bgp-vpn-interconnection-service',
+    'tuong-lai-cua-nokia-va-5g',
+    'wannacry-tai-sao-android-lai-la-noi-tru-an-truoc-ransomware',
+  ];
+  assert.ok(migratedSlugs.every(slug => existsSync(new URL(`${slug}.md`, writingDir))));
   for (const slug of [
     'pokemon-go-niantic-labs-co-ke-hoach-hoan-thien-them-truoc-khi-gioi-thieu-nhieu-hon',
     'co-vay-chien-thang-cuoi-cung-4-1-danh-cho-alphago-truoc-lee-sedol',
@@ -89,25 +96,29 @@ test('all migrated WordPress articles and their authorized images are published 
     'ovn-gateway-high-availability-plan',
     'pycharm-settings-repository',
     'giai-ngo-entry-points-trong-python',
-  ]) assert.ok(!existsSync(new URL(`vi/writing/${slug}/index.html`, root)), `${slug} should be removed`);
+  ]) assert.ok(!existsSync(new URL(`writing/${slug}/index.html`, root)), `${slug} should be removed`);
   for (const slug of migratedSlugs) {
-    const article = read(`vi/writing/${slug}/index.html`);
+    const source = readFileSync(new URL(`${slug}.md`, writingDir), 'utf8');
+    const article = read(`writing/${slug}/index.html`);
+    assert.match(source, /^lang: vi$/m);
     assert.match(article, /<html[^>]+lang="vi"/);
-    assert.match(article, /class="eyebrow">Bài viết<\/p>/);
+    assert.match(article, /class="eyebrow">Article<\/p>/);
     assert.doesNotMatch(article, /<img\b[^>]*\bsrc="https?:\/\//i, `${slug} should not embed remote images`);
     assert.doesNotMatch(article, /<img\b[^>]*\bsrcset=/i, `${slug} should not retain WordPress srcset URLs`);
     for (const match of article.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/gi)) {
-      assert.match(match[1], /^\/images\/wordpress\//, `${slug} should use an authorized local image`);
+      assert.match(match[1], /^\/images\//, `${slug} should use an authorized local image`);
     }
   }
   for (const image of [
-    'screen-shot-2016-02-29-at-10-08-14-am.png',
-    '67d82-1-4gyjqwwkhbhw7mbx5pbkw.png',
-    'cleancode.png',
-    'wp.png',
-    'python.png',
-    'wannacry-android.jpg',
-  ]) assert.ok(existsSync(new URL(`images/wordpress/${image}`, root)), `Missing migrated media: ${image}`);
+    'author-avatar.jpg',
+    'small-functions-illustration.png',
+    'clean-code-laptop-illustration.png',
+    'nokia-5g-strategy-infographic.png',
+    'android-wannacry-ransomware.jpg',
+    'cpp-creational-design-patterns.png',
+    'python-snake-illustration.png',
+  ]) assert.ok(existsSync(new URL(`images/${image}`, root)), `Missing local image: ${image}`);
+  assert.ok(!existsSync(new URL('images/wordpress/', root)), 'Image assets should not use a WordPress subdirectory');
   for (const image of [
     'pokemon-gp.jpg',
     'pokemon-go-1000x566.jpg',
@@ -116,20 +127,23 @@ test('all migrated WordPress articles and their authorized images are published 
     'bagpipe-neutron-networks-ml2.png',
     'bagpipe-neutron-bgpvpn-interconnection.png',
   ]) {
-    assert.ok(!existsSync(new URL(`images/wordpress/${image}`, root)), `Removed post media should not be published: ${image}`);
+    assert.ok(!existsSync(new URL(`images/${image}`, root)), `Removed post media should not be published: ${image}`);
   }
 });
 
-test('code, diagrams, metadata, and bilingual static search are built', () => {
-  const article = read('en/writing/gitlab-ci-first-pipeline/index.html');
+test('code, diagrams, metadata, and the shared multilingual search index are built', () => {
+  const article = read('writing/gitlab-ci-first-pipeline/index.html');
   assert.match(article, /class="astro-code/);
   assert.match(article, /data-language="mermaid"/);
   assert.match(article, /data-pagefind-body/);
   assert.match(article, /property="og:type" content="article"/);
   assert.ok(existsSync(new URL('pagefind/pagefind.js', root)));
   const searchFiles = files(new URL('pagefind/', root).pathname);
-  assert.ok(searchFiles.some(path => /\/pagefind\.en_/.test(path)), 'English search index');
-  assert.ok(searchFiles.some(path => /\/pagefind\.vi_/.test(path)), 'Vietnamese search index');
+  assert.ok(searchFiles.some(path => /\/pagefind\.en_/.test(path)), 'shared search index');
+  assert.ok(!searchFiles.some(path => /\/pagefind\.vi_/.test(path)), 'only one index should be built');
+  const index = JSON.parse(read('pagefind/pagefind-entry.json'));
+  assert.deepEqual(Object.keys(index.languages), ['en']);
+  assert.equal(index.languages.en.page_count, 14);
 });
 
 test('migrated article snippets use syntax-highlighted Shiki code blocks', () => {
@@ -139,7 +153,7 @@ test('migrated article snippets use syntax-highlighted Shiki code blocks', () =>
     { slug: 'gioi-thieu-tong-quan-design-pattern-trong-c', language: 'cpp', count: 5, legacyMarkup: /js-file-line-container/ },
     { slug: 'python-nhung-sai-lam-thuong-gap-cua-newbie-part-1', language: 'python', count: 8, legacyMarkup: /class="(?:k|nf|p|n|o|mi|mf|bp|c)"/ },
   ]) {
-    const article = read(`vi/writing/${slug}/index.html`);
+    const article = read(`writing/${slug}/index.html`);
     assert.equal((article.match(new RegExp(`data-language="${language}"`, 'g')) ?? []).length, count, slug);
     assert.match(article, new RegExp(`<pre class="astro-code[^"]*"[^>]*data-language="${language}"><code><span class="line">`), slug);
     assert.doesNotMatch(article, legacyMarkup, `${slug} should not retain old code markup`);
