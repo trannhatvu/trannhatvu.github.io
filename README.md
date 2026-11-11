@@ -34,6 +34,7 @@ just                 # list available recipes
 just check           # type-check
 just pages-config     # regenerate Pages CMS config
 just build           # build site and search index
+just publish         # build and publish dist/ to the gh-pages branch
 just test            # build, then run static-site tests
 just browser-install # install Chromium once for browser tests
 just test-browser    # build, then run browser tests
@@ -72,7 +73,7 @@ The repository includes a Pages CMS configuration in [`.pages.yml`](.pages.yml).
 After pushing it to GitHub, open [Pages CMS](https://app.pagescms.org), select
 this repository, and choose **Writing** from the content navigation. The editor
 exposes the post metadata and a rich-text Markdown body; saved changes go back
-to GitHub and trigger the normal deployment workflow.
+to GitHub. Pull those changes locally before publishing with `just publish`.
 
 The checked-in configuration is generated from the Astro writing schema. After
 changing that schema or its Pages CMS editor metadata, run `just pages-config`
@@ -109,6 +110,14 @@ starter: false
   exclude unfinished content. Drafts are not rendered even in local development.
 - Future interactive components can be imported from `.mdx` articles.
 
+### Comments
+
+Article discussions are powered by [Giscus](https://giscus.app/) and hosted in
+the repository's **Announcements** category on GitHub Discussions. Readers can
+view comments without signing in; commenting and reactions require a GitHub
+account. Giscus creates a discussion for an article when needed, so there is no
+need to publish a separate welcome discussion.
+
 ### Code, diagrams, and images
 
 Fenced code blocks with a language get Shiki syntax highlighting, line numbers,
@@ -133,11 +142,14 @@ links.
 
 ## Deploy to GitHub Pages
 
-1. Create or use the repository **trannhatvu.github.io**, and push these files to
-   its `main` branch.
-2. In **Settings → Pages → Build and deployment**, select **GitHub Actions**.
-3. The included [deployment workflow](.github/workflows/deploy.yml) runs checks on
-   pull requests targeting `main`. It deploys `dist/` only from `main`.
+1. From a local checkout with push access to `origin`, run `just publish`. This
+   builds the site and search index, then creates or updates the `gh-pages`
+   branch with `dist/`.
+2. In **Settings → Pages → Build and deployment**, choose **Deploy from a
+   branch**, then select `gh-pages` and `/(root)`.
+3. After updating content through Pages CMS, pull the changes locally and run
+   `just publish` again. Publishing is manual and does not require a GitHub
+   Actions runner.
 4. Visit `https://trannhatvu.github.io/`. Both languages share the root-level
    site; no language prefix or custom domain is needed.
 
@@ -149,15 +161,12 @@ or published by the local setup itself.
 
 `npm test` checks the **built** site: root routes, local links and anchors,
 canonical URLs, both content languages without language-prefixed routes, draft
-exclusion, syntax highlighting, search output, and the deployment workflow.
-Build before running it.
+exclusion, syntax highlighting, search output, and the GitHub Pages branch
+artifact. Build before running it.
 
-Manually check search in both languages, mobile navigation, keyboard focus,
-light/dark persistence, copy buttons, and diagram rendering after UI changes.
+Run `just verify-browser` locally to check the site and reader interactions.
 
-Automated Chromium coverage runs in the deployment workflow using the official
-Playwright image matching the locked package version, with browser and OS
-dependencies preinstalled. For local testing:
+For local browser testing, install Chromium once:
 
 ```sh
 npx playwright install chromium

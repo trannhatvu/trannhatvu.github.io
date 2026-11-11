@@ -31,8 +31,30 @@ const toc = headings.filter(heading => heading.depth === 2 || heading.depth === 
       {toc.length > 0 && <aside class="toc" data-pagefind-ignore><details open><summary>{text.toc}</summary><ol>{toc.map(heading => <li class:list={{ nested: heading.depth === 3 }}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></details></aside>}
     </div>
   </article>
+  <section class="discussion" aria-labelledby="discussion-heading" data-pagefind-ignore>
+    <h2 id="discussion-heading">{entry.data.lang === 'vi' ? 'Bình luận' : 'Discussion'}</h2>
+    <script
+      is:inline
+      src="https://giscus.app/client.js"
+      data-repo="trannhatvu/trannhatvu.github.io"
+      data-repo-id="R_kgDOVql-mw"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOVql-m84DK6nK"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang={entry.data.lang}
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
   <script>
-    import { setupArticle } from '../../scripts/article';
+    import { setupArticle, setupDiscussionTheme } from '../../scripts/article';
     setupArticle();
+    setupDiscussionTheme();
   </script>
 </Base>

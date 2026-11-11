@@ -31,6 +31,37 @@ export function setupArticle() {
   if (diagrams.length) void renderDiagrams(diagrams, article);
 }
 
+export function setupDiscussionTheme() {
+  const discussion = document.querySelector<HTMLElement>('.discussion');
+  if (!discussion) return;
+
+  const syncTheme = (frame: HTMLIFrameElement) => {
+    frame.contentWindow?.postMessage(
+      { giscus: { setConfig: { theme: document.documentElement.dataset.theme ?? 'light' } } },
+      'https://giscus.app',
+    );
+  };
+  const syncFrame = () => {
+    const frame = discussion.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    if (!frame) return;
+    frameObserver.disconnect();
+    frame.addEventListener('load', () => syncTheme(frame), { once: true });
+    syncTheme(frame);
+  };
+  const frameObserver = new MutationObserver(syncFrame);
+  frameObserver.observe(discussion, { childList: true, subtree: true });
+  syncFrame();
+
+  const themeObserver = new MutationObserver(() => {
+    const frame = discussion.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    if (frame) syncTheme(frame);
+  });
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+}
+
 async function renderDiagrams(diagrams: NodeListOf<HTMLElement>, article: HTMLElement) {
   try {
     const { default: mermaid } = await import('mermaid');

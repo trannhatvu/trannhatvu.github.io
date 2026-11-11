@@ -2,7 +2,6 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { parse } from 'yaml';
 
 const root = new URL('../dist/', import.meta.url);
 assert.ok(existsSync(root), 'Run npm run build before npm test.');
@@ -65,6 +64,22 @@ test('all generated local links, assets, and heading anchors resolve', () => {
 test('published articles have no language-switch or alternate-language links', () => {
   const article = read('writing/gitlab-ci-first-pipeline/index.html');
   assert.doesNotMatch(article, /translation-link|language-link|hreflang/);
+});
+
+test('article discussions use Giscus with the shared category and article language', () => {
+  const english = read('writing/gitlab-ci-first-pipeline/index.html');
+  const vietnamese = read('writing/gitlab-ci-first-pipeline-vi/index.html');
+  for (const article of [english, vietnamese]) {
+    assert.match(article, /src="https:\/\/giscus\.app\/client\.js"/);
+    assert.match(article, /data-repo-id="R_kgDOVql-mw"/);
+    assert.match(article, /data-category-id="DIC_kwDOVql-m84DK6nK"/);
+    assert.match(article, /data-mapping="pathname"/);
+    assert.match(article, /data-loading="lazy"/);
+  }
+  assert.match(english, /data-lang="en"/);
+  assert.match(vietnamese, /data-lang="vi"/);
+  assert.match(english, /id="discussion-heading">Discussion<\/h2>/);
+  assert.match(vietnamese, /id="discussion-heading">Bình luận<\/h2>/);
 });
 
 test('drafts never leak and notes stay separate from writing archives', () => {
@@ -160,20 +175,7 @@ test('migrated article snippets use syntax-highlighted Shiki code blocks', () =>
   }
 });
 
-test('deployment checks and tests the exact artifact before publishing', () => {
-  const workflow = readFileSync(new URL('../.github/workflows/deploy.yml', import.meta.url), 'utf8');
-  const config = parse(workflow);
-  const lockfile = JSON.parse(readFileSync(new URL('../package-lock.json', import.meta.url), 'utf8'));
-  for (const step of ['npm ci', 'npm run check', 'npm run build', 'npm test', 'actions/deploy-pages@']) assert.ok(workflow.includes(step));
-  assert.match(workflow, /path: dist/);
-  assert.match(workflow, /needs: build/);
-  assert.equal(config.jobs.build.container.image, `mcr.microsoft.com/playwright:v${lockfile.packages['node_modules/@playwright/test'].version}-noble`);
-  assert.match(config.jobs.build.container.options, /--ipc=host/);
-  assert.doesNotMatch(workflow, /playwright install --with-deps/);
-  assert.deepEqual(config.on.pull_request.branches, ['main']);
-  assert.equal(config.jobs.deploy.if, "github.ref == 'refs/heads/main'");
-  for (const name of ['Configure Pages', 'Upload site']) {
-    const step = config.jobs.build.steps.find(candidate => candidate.name === name);
-    assert.equal(step.if, config.jobs.deploy.if);
-  }
+test('built site is ready for branch-based GitHub Pages publishing', () => {
+  assert.ok(existsSync(new URL('.nojekyll', root)), 'Jekyll must not hide Astro assets');
+  assert.ok(files(root.pathname).some(path => path.includes('/_astro/')), 'Astro assets should be built');
 });
