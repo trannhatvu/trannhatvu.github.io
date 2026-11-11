@@ -6,29 +6,19 @@ import { writingSchema } from '../src/content/writing-schema.mjs';
 const configPath = fileURLToPath(new URL('../.pages.yml', import.meta.url));
 const checkOnly = process.argv.includes('--check');
 
-const languages = [
-  { code: 'en', label: 'English', collectionLabel: 'Writing (English)' },
-  { code: 'vi', label: 'Tiếng Việt', collectionLabel: 'Bài viết (Tiếng Việt)' },
-];
-
-function fieldsFor(language) {
+function fieldsFor() {
   const fields = Object.entries(writingSchema.shape).map(([name, schema]) => {
     const metadata = schema.meta()?.pagesCms;
     if (!metadata) {
       throw new Error(`Missing Pages CMS metadata for writing field "${name}".`);
     }
 
-    const field = structuredClone(metadata);
-    if (name === 'lang') {
-      field.options.values = [{ name: language.code, label: language.label }];
-    }
-
-    return { name, ...field };
+    return { name, ...structuredClone(metadata) };
   });
 
   fields.push({
     name: 'body',
-    label: language.code === 'en' ? 'Content' : 'Nội dung',
+    label: 'Content',
     type: 'rich-text',
     options: {
       format: 'markdown',
@@ -52,21 +42,21 @@ const config = {
       rename: 'safe',
     },
   ],
-  content: languages.map((language) => ({
-    name: `writing-${language.code}`,
-    label: language.collectionLabel,
+  content: [{
+    name: 'writing',
+    label: 'Writing',
     type: 'collection',
-    path: `src/content/writing/${language.code}`,
+    path: 'src/content/writing',
     format: 'yaml-frontmatter',
     filename: '{primary}.md',
-    fields: fieldsFor(language),
+    fields: fieldsFor(),
     view: {
       fields: ['title', 'date', 'kind', 'draft'],
       primary: 'title',
       sort: ['date', 'title'],
       default: { sort: 'date', order: 'desc' },
     },
-  })),
+  }],
 };
 
 const generated = stringify(config, { lineWidth: 0 });

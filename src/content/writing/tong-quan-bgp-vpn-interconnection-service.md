@@ -5,7 +5,6 @@ date: 2018-05-28
 lang: vi
 kind: article
 tags: ["Công nghệ"]
-translationKey: "wordpress-687"
 draft: false
 starter: false
 ---

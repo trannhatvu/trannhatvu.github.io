@@ -5,13 +5,12 @@ date: 2018-08-18
 lang: vi
 kind: article
 tags: ["C++"]
-translationKey: "wordpress-773"
 draft: false
 starter: false
 ---
 
 
-<div class="wp-block-image"><figure class="aligncenter size-large"><a href="/images/wordpress/wp.png"><img loading="lazy" width="689" height="374" data-attachment-id="884" data-permalink="https://rainipetitcoin.wordpress.com/2018/08/18/gioi-thieu-tong-quan-design-pattern-trong-c/wp/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/08/wp.png" data-orig-size="689,374" data-comments-opened="1" data-image-title="WP" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/08/wp.png?w=689" src="/images/wordpress/wp.png" alt="" class="wp-image-884" /></a></figure></div>
+<div class="wp-block-image"><figure class="aligncenter size-large"><a href="/images/cpp-creational-design-patterns.png"><img loading="lazy" width="689" height="374" data-attachment-id="884" data-permalink="https://rainipetitcoin.wordpress.com/2018/08/18/gioi-thieu-tong-quan-design-pattern-trong-c/wp/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/08/wp.png" data-orig-size="689,374" data-comments-opened="1" data-image-title="WP" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/08/wp.png?w=689" src="/images/cpp-creational-design-patterns.png" alt="" class="wp-image-884" /></a></figure></div>
 
 
 <p style="text-align:justify;">Mục lục</p>

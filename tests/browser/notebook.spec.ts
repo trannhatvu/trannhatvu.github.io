@@ -6,7 +6,7 @@ test('homepage is readable and navigable at desktop and mobile widths', async ({
   const requests: string[] = [];
   page.on('request', request => requests.push(request.url()));
   await page.goto('/');
-  await expect(page).toHaveURL(/\/en\/$/);
+  await expect(page).toHaveURL('http://127.0.0.1:4321/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Code, curiosity,and life abroad.');
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
@@ -25,36 +25,33 @@ test('homepage is readable and navigable at desktop and mobile widths', async ({
   expect(requests.every(url => url.startsWith('http://127.0.0.1:4321/'))).toBe(true);
   expect(requests.some(url => /mermaid|pagefind/.test(url))).toBe(false);
   await page.getByRole('navigation').getByRole('link', { name: 'Notes' }).click();
-  await expect(page).toHaveURL(/\/en\/notes\/$/);
+  await expect(page).toHaveURL(/\/notes\/$/);
   await expect(page.getByRole('heading', { name: 'A green log is not an exit code' })).toBeVisible();
 });
 
-test('theme choice persists across reload and language navigation', async ({ page }) => {
+test('theme choice persists across reload with an English interface', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' });
-  await page.goto('/en/');
+  await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('.language-link, [hreflang]')).toHaveCount(0);
   await page.getByRole('button', { name: 'Switch color theme' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await expect(page.getByRole('button', { name: 'Switch color theme' })).toHaveAttribute('aria-pressed', 'true');
-  await page.getByRole('link', { name: 'Read in Vietnamese', exact: true }).click();
-  await expect(page.locator('html')).toHaveAttribute('lang', 'vi');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await page.getByRole('button', { name: 'Đổi giao diện sáng tối' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 });
 
 test('search finds English posts, handles no results, and clears cleanly', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/en/search/');
+  await page.goto('/search/');
   const input = page.getByRole('searchbox');
   await input.fill('pipeline');
   await expect(page.locator('.search-results li').first()).toBeVisible();
   await expect(page.locator('.search-results')).toContainText('A small GitLab CI pipeline');
   const links = await page.locator('.search-results a').evaluateAll(elements => elements.map(element => element.getAttribute('href')));
-  expect(links.every(link => link?.startsWith('/en/'))).toBe(true);
+  expect(links.every(link => link?.startsWith('/writing/'))).toBe(true);
   await input.fill('zzzznotarealword');
   await expect(page.getByRole('status')).toHaveText('No results. Try a different word.');
   await expect(page.locator('.search-results li')).toHaveCount(0);
@@ -63,25 +60,28 @@ test('search finds English posts, handles no results, and clears cleanly', async
   expect(errors).toEqual([]);
 });
 
-test('Vietnamese search uses its own index and supports accented queries', async ({ page }) => {
-  await page.goto('/vi/search/');
+test('search finds Vietnamese posts in the shared index', async ({ page }) => {
+  await page.goto('/search/');
   await page.getByRole('searchbox').fill('kiểm tra');
   await expect(page.locator('.search-results li').first()).toBeVisible();
-  await expect(page.locator('.search-results a[href="/vi/writing/gitlab-ci-first-pipeline/"]')).toContainText('Một pipeline GitLab CI nhỏ');
+  await expect(page.locator('.search-results a[href="/writing/gitlab-ci-first-pipeline-vi/"]'))
+    .toContainText('Một pipeline GitLab CI nhỏ');
 });
 
 test('search reports an index loading failure explicitly', async ({ page }) => {
   await page.route('**/pagefind/pagefind.js', route => route.abort());
-  await page.goto('/en/search/');
+  await page.goto('/search/');
   await page.getByRole('searchbox').fill('pipeline');
   await expect(page.getByRole('status')).toHaveText('Search could not load. Please reload and try again.');
 });
 
-test('articles render diagrams, copy exact code, and link only real translations', async ({ page, context }) => {
+test('articles render diagrams and copy exact code without language links', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/en/writing/gitlab-ci-first-pipeline/');
+  await page.goto('/writing/gitlab-ci-first-pipeline/');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('.language-link, .translation-link, [hreflang]')).toHaveCount(0);
   await expect(page.locator('.diagram svg')).toBeVisible();
   await expect(page.locator('.code-block')).toHaveCount(2);
   const code = await page.locator('.code-block code').first().textContent();
@@ -93,23 +93,16 @@ test('articles render diagrams, copy exact code, and link only real translations
   await expect(page.locator('.toc summary')).toBeVisible();
   await page.locator('.toc summary').click();
   await expect(page.locator('.toc ol')).toBeHidden();
-  await page.locator('.translation-link').click();
-  await expect(page.locator('html')).toHaveAttribute('lang', 'vi');
-  await expect(page.locator('.diagram svg')).toBeVisible();
-  await page.goto('/en/writing/bash-scripts-that-fail-clearly/');
-  await expect(page.locator('.translation-link')).toHaveCount(0);
-  await expect(page.locator('.language-link')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 
-test('migrated article snippets have syntax highlighting and numbered lines', async ({ page }) => {
-  for (const { slug, language, count } of [
-    { slug: 'c-su-dung-callback-voi-template', language: 'cpp', count: 2 },
-    { slug: 'lam-the-nao-de-viet-code-sach-nhung-bai-hoc-tu-the-clean-code-cua-robert-c-martin', language: 'java', count: 2 },
-    { slug: 'gioi-thieu-tong-quan-design-pattern-trong-c', language: 'cpp', count: 5 },
-    { slug: 'python-nhung-sai-lam-thuong-gap-cua-newbie-part-1', language: 'python', count: 8 },
+test('article snippets in both languages have highlighting and numbered lines', async ({ page }) => {
+  for (const { slug, lang, language, count } of [
+    { slug: 'bash-scripts-that-fail-clearly', lang: 'en', language: 'bash', count: 1 },
+    { slug: 'gioi-thieu-tong-quan-design-pattern-trong-c', lang: 'vi', language: 'cpp', count: 5 },
   ]) {
-    await page.goto(`/vi/writing/${slug}/`);
+    await page.goto(`/writing/${slug}/`);
+    await expect(page.locator('html')).toHaveAttribute('lang', lang);
     const snippets = page.locator(`pre.astro-code[data-language="${language}"]`);
     await expect(snippets).toHaveCount(count);
     const firstLine = snippets.first().locator('.line').first();
@@ -125,11 +118,11 @@ test('migrated article snippets have syntax highlighting and numbered lines', as
 test('content remains usable without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:4321/en/writing/gitlab-ci-first-pipeline/');
+  await page.goto('http://127.0.0.1:4321/writing/gitlab-ci-first-pipeline/');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(page.locator('pre[data-language="mermaid"]')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Switch color theme' })).toBeHidden();
-  await page.goto('http://127.0.0.1:4321/en/search/');
+  await page.goto('http://127.0.0.1:4321/search/');
   await expect(page.locator('noscript p')).toBeVisible();
   await expect(page.locator('noscript p')).toContainText('Search needs JavaScript.');
   await context.close();
@@ -137,7 +130,7 @@ test('content remains usable without JavaScript', async ({ browser }) => {
 
 test('diagram loading errors preserve the source and explain the failure', async ({ page }) => {
   await page.route('**/_astro/mermaid.core.*.js', route => route.abort());
-  await page.goto('/en/writing/gitlab-ci-first-pipeline/');
+  await page.goto('/writing/gitlab-ci-first-pipeline/');
   await expect(page.getByRole('alert')).toHaveText('The diagram could not render. Its source is shown below.');
   await expect(page.locator('pre[data-language="mermaid"]')).toBeVisible();
   await expect(page.locator('.diagram')).toHaveCount(0);

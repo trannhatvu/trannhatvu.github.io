@@ -26,12 +26,11 @@ export function setupSearch() {
     status.textContent = panel.dataset.loading ?? '';
     try {
       const indexUrl = '/pagefind/pagefind.js';
-      pagefind ??= import(/* @vite-ignore */ indexUrl) as Promise<Pagefind>;
-      const index = await pagefind;
-      const response = await index.search(query);
-      const entries = await Promise.all(response.results.slice(0, 20).map(result => result.data()));
+    pagefind ??= import(/* @vite-ignore */ indexUrl).then((module: Pagefind) => module);
+    const { results: searchResults } = await (await pagefind).search(query);
+      const entries = await Promise.all(searchResults.slice(0, 20).map(result => result.data()));
       if (version !== generation) return;
-      status.textContent = response.results.length ? `${response.results.length} ${panel.dataset.results}` : panel.dataset.empty ?? '';
+      status.textContent = searchResults.length ? `${searchResults.length} ${panel.dataset.results}` : panel.dataset.empty ?? '';
       for (const entry of entries) {
         const item = document.createElement('li');
         const link = document.createElement('a');

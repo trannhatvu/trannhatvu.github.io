@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { text } from '../lib/site';
+---
+<Base title={text.search}>
+  <header class="page-heading"><p class="eyebrow">THE NOTEBOOK / {text.search}</p><h1>{text.search}<span class="accent">.</span></h1><p>{text.searchDescription}</p></header>
+  <section class="search-panel" data-search data-loading={text.searchLoading} data-empty={text.searchEmpty} data-error={text.searchError} data-results={text.results} data-dev={import.meta.env.DEV ? text.searchDev : undefined}>
+    <label for="search-input" class="eyebrow">{text.searchLabel}</label>
+    <input id="search-input" type="search" placeholder={text.searchPlaceholder} autocomplete="off" aria-describedby="search-hint" />
+    <p id="search-hint" class="search-hint">{text.searchHint}</p>
+    <p class="search-status" role="status" aria-live="polite"></p>
+    <ul class="search-results"></ul>
+    <noscript><p>Search needs JavaScript. You can still browse all writing and topics.</p><a href="/writing/">{text.allWriting}</a></noscript>
+  </section>
+  <script>
+    import { setupSearch } from '../scripts/search';
+    setupSearch();
+  </script>
+</Base>

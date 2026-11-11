@@ -69,7 +69,6 @@ img { display: block; max-width: 100%; height: auto; }
 .header-tools { display: flex; align-items: center; gap: 5px; }
 .icon-button { border: 0; background: transparent; color: var(--muted); width: 40px; height: 40px; display: grid; place-content: center; border-radius: 7px; }
 .icon-button:hover { background: var(--soft); color: var(--accent); }
-.language-link { font: 11px var(--font-mono); padding: 10px; margin-left: 5px; border-left: 1px solid var(--line); }
 .sun-icon, [data-theme="dark"] .moon-icon { display: none; }
 [data-theme="dark"] .sun-icon { display: block; }
 .site-main { min-height: 60vh; padding-bottom: 80px; }
@@ -90,9 +89,7 @@ h1, h2, h3, p { margin-top: 0; }
 .profile-stamp > div > span { font-size: 11px; color: var(--muted); }
 .portrait { width: 42px; height: 42px; flex-shrink: 0; background: var(--accent-soft); color: var(--accent); display: grid; place-content: center; font: 600 14px var(--font-mono); border-radius: 50%; border: 1px solid var(--line); position: relative; }
 .portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.portrait-dot { position: absolute; height: 8px; width: 8px; bottom: 1px; right: 0; border: 2px solid var(--bg); background: var(--accent); border-radius: 50%; }
 .portrait-large { width: 160px; height: 160px; font-size: 48px; }
-.portrait-large .portrait-dot { width: 18px; height: 18px; right: 12px; bottom: 5px; }
 .code-note { border: 1px solid var(--line); background: var(--surface); box-shadow: 7px 7px 0 var(--soft); background-image: linear-gradient(var(--soft) 1px, transparent 1px), linear-gradient(90deg, var(--soft) 1px, transparent 1px); background-size: 21px 21px; }
 .code-note-heading { display: flex; align-items: center; gap: 5px; padding: 13px 15px; border-bottom: 1px solid var(--line); background: var(--surface); }
 .code-note-heading > span { width: 5px; height: 5px; border-radius: 50%; background: var(--line); }
@@ -232,7 +229,6 @@ h1, h2, h3, p { margin-top: 0; }
   .brand-subtitle { font-size: 8px; }
   .header-tools { gap: 0; }
   .icon-button { width: 35px; height: 40px; }
-  .language-link { padding: 8px; margin-left: 2px; }
   .site-header nav { order: 3; width: 100%; gap: 27px; padding-top: 12px; font-size: 12px; }
   .site-header nav a { padding-bottom: 13px; }
   .hero { display: block; padding-block: 38px; }

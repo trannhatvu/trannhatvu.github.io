@@ -5,7 +5,6 @@ date: 2026-11-08
 lang: en
 kind: tutorial
 tags: ["Scripting", "Automation"]
-translationKey: bash-scripts-that-fail-clearly
 starter: true
 ---
 

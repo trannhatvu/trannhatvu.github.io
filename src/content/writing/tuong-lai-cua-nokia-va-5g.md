@@ -5,13 +5,12 @@ date: 2018-11-28
 lang: vi
 kind: article
 tags: ["Công nghệ"]
-translationKey: "wordpress-819"
 draft: false
 starter: false
 ---
 
 <div class="">
-<div><img loading="lazy" data-attachment-id="820" data-permalink="https://rainipetitcoin.wordpress.com/2018/11/28/tuong-lai-cua-nokia-va-5g/screen-shot-2016-02-29-at-10-08-14-am/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/screen-shot-2016-02-29-at-10-08-14-am.png" data-orig-size="2178,1032" data-comments-opened="1" data-image-title="Screen-Shot-2016-02-29-at-10.08.14-AM" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/screen-shot-2016-02-29-at-10-08-14-am.png?w=1024" class=" size-full wp-image-820 aligncenter" src="/images/wordpress/screen-shot-2016-02-29-at-10-08-14-am.png" alt="Screen-Shot-2016-02-29-at-10.08.14-AM" width="2178" height="1032"></div>
+<div><img loading="lazy" data-attachment-id="820" data-permalink="https://rainipetitcoin.wordpress.com/2018/11/28/tuong-lai-cua-nokia-va-5g/screen-shot-2016-02-29-at-10-08-14-am/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/screen-shot-2016-02-29-at-10-08-14-am.png" data-orig-size="2178,1032" data-comments-opened="1" data-image-title="Screen-Shot-2016-02-29-at-10.08.14-AM" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/screen-shot-2016-02-29-at-10-08-14-am.png?w=1024" class=" size-full wp-image-820 aligncenter" src="/images/nokia-5g-strategy-infographic.png" alt="Screen-Shot-2016-02-29-at-10.08.14-AM" width="2178" height="1032"></div>
 <div></div>
 <div></div>
 <div class="_1mf _1mj">

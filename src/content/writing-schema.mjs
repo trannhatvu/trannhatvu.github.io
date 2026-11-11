@@ -36,9 +36,6 @@ export const writingSchema = z.object({
   tags: z.array(z.string()).min(1).meta({
     pagesCms: { type: 'string', list: true, required: true },
   }),
-  translationKey: z.string().meta({
-    pagesCms: { type: 'string', required: true },
-  }),
   draft: z.boolean().default(false).meta({
     pagesCms: { type: 'boolean', default: false },
   }),

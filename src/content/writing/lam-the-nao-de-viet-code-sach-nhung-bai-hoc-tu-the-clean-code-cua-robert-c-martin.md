@@ -5,13 +5,12 @@ date: 2018-11-13
 lang: vi
 kind: article
 tags: ["Công nghệ"]
-translationKey: "wordpress-800"
 draft: false
 starter: false
 ---
 
 
-<figure class="wp-block-image size-large"><a href="/images/wordpress/cleancode.png"><img loading="lazy" width="1024" height="512" data-attachment-id="877" data-permalink="https://rainipetitcoin.wordpress.com/2018/11/13/lam-the-nao-de-viet-code-sach-nhung-bai-hoc-tu-the-clean-code-cua-robert-c-martin/cleancode/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/cleancode.png" data-orig-size="1600,800" data-comments-opened="1" data-image-title="CleanCode" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/cleancode.png?w=1024" src="/images/wordpress/cleancode.png" alt="" class="wp-image-877" /></a></figure>
+<figure class="wp-block-image size-large"><a href="/images/clean-code-laptop-illustration.png"><img loading="lazy" width="1024" height="512" data-attachment-id="877" data-permalink="https://rainipetitcoin.wordpress.com/2018/11/13/lam-the-nao-de-viet-code-sach-nhung-bai-hoc-tu-the-clean-code-cua-robert-c-martin/cleancode/" data-orig-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/cleancode.png" data-orig-size="1600,800" data-comments-opened="1" data-image-title="CleanCode" data-image-description="" data-image-caption="" data-large-file="https://rainipetitcoin.wordpress.com/wp-content/uploads/2018/11/cleancode.png?w=1024" src="/images/clean-code-laptop-illustration.png" alt="" class="wp-image-877" /></a></figure>
 
 
 <section class="section section--body section--first">
@@ -52,7 +51,7 @@ starter: false
 <h3 id="26eb" class="graf graf--h3 graf-after--p"><em>Function</em></h3>
 <figure id="d33d" class="graf graf--figure graf--layoutOutsetLeft graf-after--h3">
 <div class="aspectRatioPlaceholder is-locked">
-<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded"><img class="progressiveMedia-image js-progressiveMedia-image alignleft" src="/images/wordpress/67d82-1-4gyjqwwkhbhw7mbx5pbkw.png" /></div>
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded"><img class="progressiveMedia-image js-progressiveMedia-image alignleft" src="/images/small-functions-illustration.png" /></div>
 </div>
 </figure>
 <p>Nguyên tắc đầu tiên của function là chúng cần nhỏ. Nguyên tắc thứ hai của function là chúng cần nhỏ hơn nữa. Ngụ ý rắng những block trong các câu lệnh if else while v.v nên chỉ là một dòng dài. Có thể dòng đó có thể là một function call. Điều này không chỉ giữ cho phần kèm theo function nhỏ mà còn bổ sung giá trị tra cứu tài liệu bởi function được gọi trong block có thể có một cái tên mô tả xinh xắn.</p>
