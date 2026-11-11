@@ -184,6 +184,8 @@ h1, h2, h3, p { margin-top: 0; }
 .article-heading .entry-meta { margin-bottom: 15px; }
 .translation-link { color: var(--accent); font-size: 12px; display: inline-block; margin-top: 20px; }
 .article-layout { display: grid; grid-template-columns: minmax(0, 720px) minmax(0, 1fr); gap: 55px; border-top: 1px solid var(--line); padding-top: 36px; align-items: start; }
+.discussion { max-width: 720px; margin-top: 52px; }
+.discussion h2 { font-size: 23px; letter-spacing: -.5px; margin-bottom: 18px; }
 .toc { position: sticky; top: 28px; font-size: 11px; line-height: 1.8; }
 .toc summary { font: 10px var(--font-mono); text-transform: uppercase; color: var(--muted); letter-spacing: 1px; cursor: pointer; }
 .toc ol { margin: 18px 0 0; padding: 0; list-style: none; border-left: 1px solid var(--line); }

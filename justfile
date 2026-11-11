@@ -18,6 +18,9 @@ pages-config:
 build:
     {{node22}} 'npm run build'
 
+publish:
+    {{node22}} 'npm run publish:pages'
+
 test: build
     {{node22}} 'npm test'
 
