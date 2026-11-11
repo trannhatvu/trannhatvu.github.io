@@ -1,18 +1,18 @@
 ---
 title: "[C++] Sử dụng callback với template"
-description: "Sử dụng template trong C++ để viết code trở nên generic hơn là một kiến thức cơ bản của dev C++. Đối với các beginner, template chủ yếu để sử dụng một function cho nhiều data type khác nhau."
+description: Sử dụng template trong C++ để viết code trở nên tổng quát hơn là
+  một kiến thức cơ bản của dev C++. Đối với người mới, template chủ yếu để sử
+  dụng một hàm cho nhiều kiểu dữ liệu khác nhau.
 date: 2021-07-08
 lang: vi
 kind: article
-tags: ["C++"]
-translationKey: "wordpress-906"
+tags:
+  - C++
+translationKey: wordpress-906
 draft: false
 starter: false
 ---
-
-
-<p class="wp-block-paragraph">Sử dụng template trong C++ để viết code trở nên generic hơn là một kiến thức cơ bản của dev C++. Đối với các beginner, template chủ yếu để sử dụng một function cho nhiều data type khác nhau.</p>
-
+Sử dụng template trong C++ để viết code trở nên tổng quát hơn là một kiến thức cơ bản của dev C++. Đối với người mới, template chủ yếu để sử dụng một hàm cho nhiều kiểu dữ liệu khác nhau.
 
 ```cpp
 #include <iostream>
@@ -38,15 +38,11 @@ int main()
 
 
 
+&nbsp;
 
+Nhưng template có thể làm được nhiều hơn thế nữa. Chúng ta có 2 hàm A1 và A2 giống nhau 99%, chỉ khác nhau ở việc A1 gọi 1 hàm B1, còn A2 gọi 1 hàm B2.
 
-
-<p class="wp-block-paragraph">Nhưng template có thể làm được nhiều hơn thế nữa. Chúng ta có 2 function A1 và A2 giống nhau 99%, chỉ khác nhau ở việc A1 gọi 1 function B1, còn A2 gọi 1 function B2. </p>
-
-
-
-<p class="wp-block-paragraph">Ý tưởng là chỉ cần một viết function A có thể gọi một function B, và B là một paramater.</p>
-
+Ý tưởng ở đây là chỉ cần viết một function A có thể gọi một function B, và B là một paramater.
 
 ```cpp
 #include <iostream>
@@ -74,14 +70,11 @@ int main()
 }
 ```
 
+Output
 
-<p class="wp-block-paragraph">Output</p>
+```
+5
+15
+```
 
-
-
-<pre class="wp-block-code"><code>5
-15</code></pre>
-
-
-
-<p class="wp-block-paragraph">Chú ý: Template là một tính năng ở compile-time, một công cụ để thiết kế tính đa hình ở compile-time.</p>
+Chú ý: Template là một tính năng ở compile-time, một công cụ để thiết kế tính đa hình ở compile-time.
