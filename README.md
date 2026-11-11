@@ -133,8 +133,8 @@ The 8 remaining migrated WordPress posts are in the Vietnamese archive. The
 1. Create or use the repository **trannhatvu.github.io**, and push these files to
    its `main` branch.
 2. In **Settings → Pages → Build and deployment**, select **GitHub Actions**.
-3. The included [deployment workflow](.github/workflows/deploy.yml) installs from
-   the lockfile, type-checks, builds, tests, and deploys `dist/`.
+3. The included [deployment workflow](.github/workflows/deploy.yml) runs checks on
+   pull requests targeting `main`. It deploys `dist/` only from `main`.
 4. Visit `https://trannhatvu.github.io/`. The root leads to `/en/`; Vietnamese lives
    at `/vi/`. No custom domain is needed.
 
