@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { parse } from 'yaml';
 
 const root = new URL('../dist/', import.meta.url);
 assert.ok(existsSync(root), 'Run npm run build before npm test.');
@@ -69,7 +70,14 @@ test('all migrated WordPress articles and their authorized images are published 
   const writingDir = new URL('../src/content/writing/vi/', import.meta.url);
   const migratedSlugs = readdirSync(writingDir)
     .filter(filename => filename.endsWith('.md'))
-    .filter(filename => readFileSync(new URL(filename, writingDir), 'utf8').includes('translationKey: "wordpress-'))
+    .filter(filename => {
+      const source = readFileSync(new URL(filename, writingDir), 'utf8');
+      const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1];
+      if (frontmatter === undefined) return false;
+      const metadata = parse(frontmatter);
+      return typeof metadata?.translationKey === 'string'
+        && metadata.translationKey.startsWith('wordpress-');
+    })
     .map(filename => filename.slice(0, -3));
   assert.equal(migratedSlugs.length, 8);
   for (const slug of [
@@ -140,7 +148,14 @@ test('migrated article snippets use syntax-highlighted Shiki code blocks', () =>
 
 test('deployment checks and tests the exact artifact before publishing', () => {
   const workflow = readFileSync(new URL('../.github/workflows/deploy.yml', import.meta.url), 'utf8');
+  const config = parse(workflow);
   for (const step of ['npm ci', 'npm run check', 'npm run build', 'npm test', 'actions/deploy-pages@']) assert.ok(workflow.includes(step));
   assert.match(workflow, /path: dist/);
   assert.match(workflow, /needs: build/);
+  assert.deepEqual(config.on.pull_request.branches, ['main']);
+  assert.equal(config.jobs.deploy.if, "github.ref == 'refs/heads/main'");
+  for (const name of ['Configure Pages', 'Upload site']) {
+    const step = config.jobs.build.steps.find(candidate => candidate.name === name);
+    assert.equal(step.if, config.jobs.deploy.if);
+  }
 });
